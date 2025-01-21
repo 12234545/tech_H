@@ -105,6 +105,7 @@
              <div class="toggle">
                  <ion-icon name="swap-horizontal-outline"></ion-icon>
              </div>
+
      <main class="content10">
                  <div class="post" data-post-id="1">
                      <div class="post-header">
@@ -119,9 +120,9 @@
                      </div>
                      <p style="color: black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                     <!-- Options sous le post -->
+
                      <div class="post-options">
-                         <!-- Noter le post -->
+
                          <div class="rating">
                              <span class="stars">
                                  <i class="fas fa-star" data-value="1"></i>
@@ -179,7 +180,7 @@
                            </div>
                        </div>
                    </div>
-                     <!-- Section des commentaires -->
+
 
                  </div>
 

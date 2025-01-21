@@ -1,0 +1,23 @@
+.container8{
+
+
+    justify-content: center;
+    min-height: 90vh;
+    background: black;
+    background-size: cover;
+    background-position: center;
+    background-color: black;
+    padding-top: 0;
+}
+
+.container8 h1{
+    color: white;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.container8 p{
+    text-align: center;
+    color: #0f6bc2;
+}

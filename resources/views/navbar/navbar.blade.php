@@ -22,7 +22,7 @@
                            </div>
                            <div class="row">
                                 <header><a> WEB DEVELOPMENT </a></header>
-                                <img src="{{asset('storage/images/CYB.png')}}" alt="">
+                                <img src="{{asset('storage/images/DEV.png')}}" alt="">
                           </div>
                           <div class="row">
                                 <header><a> OTHERS </a></header>
@@ -40,14 +40,28 @@
           @endguest
 
           @auth
-          <div class="user-bar">
 
-                <a href="{{ route('app_history')}}"><i class='bx bx-history' style="color: white ; font-size: 40px"></i></a>
+            <div class="user-bar">
+
                 <p style="color: white; font-size: 20px; padding: 10px">{{ Auth::user()->name }}</p>
-                <i class='bx bxs-user-circle' style="color: white ; font-size: 40px"></i>
-                <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="color: white"></i>Log Out</a>
+                <div class="profile-dropdown" >
+
+                     <div class="profile-img">
+
+                        <i class='bx bxs-user-circle' style="color: rgb(242, 237, 237) ; font-size: 60px"></i>
+                     </div>
+                     <div class="dropdown-content">
+                         <a href="#"><i class='bx bxs-user' style="font-size: 20px"></i> mon profil</a>
+                         <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
+                         <a href="{{ route('saves.index') }}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
+                         <a href="{{ route('app_history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
+                     </div>
+              </div>
+           </div>
           @endauth
 
-       </div>
+
+        </div>
   </nav>
 </div>
+
