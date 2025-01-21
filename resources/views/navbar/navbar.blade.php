@@ -46,6 +46,7 @@
                 <p style="color: white; font-size: 20px; padding: 10px">{{ Auth::user()->name }}</p>
                 <i class='bx bxs-user-circle' style="color: white ; font-size: 40px"></i>
                 <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="color: white"></i>Log Out</a>
+                <a href="{{ route('saves.index') }}" class="logO"><i class='bx bx-bookmark' style="color: white"></i>Save</a>
           @endauth
 
        </div>

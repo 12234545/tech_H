@@ -1,7 +1,8 @@
 <?php
-
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\logincontroller;
+use App\Http\Controllers\SavedPostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,16 @@ Route::get('/about', [HomeController::class,'about'])
        ->name('app_about');
 
 Route::get('/history', [HomeController::class,'history'])
-       ->name('app_history');
+       ->name('app_history')
+       ->middleware('auth');
+
+ Route::middleware(['auth'])->group(function () {
+        Route::get('/saves', [SavedPostController::class, 'index'])->name('saves.index');
+        Route::post('/saves', [SavedPostController::class, 'store'])->name('saves.store');
+        Route::delete('/saves/{id}', [SavedPostController::class, 'destroy'])->name('saves.destroy');
+ });
+
+ Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 
 Route::match(['get','post'],'/dashboard',[HomeController::class,'dashboard'])
       ->middleware('auth')

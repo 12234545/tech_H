@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo',
+        'description'
     ];
 
     /**
@@ -33,6 +37,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
     /**
      * The attributes that should be cast.
      *
@@ -41,4 +49,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function savedPosts(): HasMany
+    {
+        return $this->hasMany(SavedPost::class);
+    }
 }
