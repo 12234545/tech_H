@@ -105,7 +105,7 @@
              <div class="toggle">
                  <ion-icon name="swap-horizontal-outline"></ion-icon>
              </div>
-    <!--
+
      <main class="content10">
                  <div class="post" data-post-id="1">
                      <div class="post-header">
@@ -187,37 +187,7 @@
 
 
      </main>
-    -->
-    @foreach($articles as $article)
-    <div class="post" data-post-id="{{ $article->id }}">
-        <div class="post-header">
-            <div class="post-avatar">
-                @if($article->user->profile_photo)
-                    <img src="{{ asset('storage/' . $article->user->profile_photo) }}" alt="Photo de profil">
-                @endif
-            </div>
-            <div class="post-meta">
-                <strong>{{ $article->user->name }}</strong>
-                <div>{{ $article->created_at->diffForHumans() }}</div>
-            </div>
-        </div>
-        @if($article->image)
-            <div>
-                <img src="{{ asset('storage/' . $article->image) }}" alt="Image article">
-            </div>
-        @endif
-        <p style="color: black">{{ $article->content }}</p>
 
-        <div class="post-theme">
-            <span class="icon">
-                <ion-icon name="{{ $article->theme->icon }}"></ion-icon>
-            </span>
-            <span class="title">{{ $article->theme->name }}</span>
-        </div>
-
-        <!-- Le reste de votre code pour les options du post -->
-    </div>
-@endforeach
  </div>
 
  <a href="#" class="back-to-top">
