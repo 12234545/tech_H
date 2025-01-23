@@ -327,7 +327,7 @@
                      <div class="post">
                          <div class="post-header">
                              <div class="post-avatar">
-                                <img src="{{ $article->creator->profile_photo_url ?? asset('default-avatar.png') }}" alt="Profile">
+                                <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile Photo">
                              </div>
                               <div class="post-meta">
                                     <strong>{{ $article->creator->name }}</strong>

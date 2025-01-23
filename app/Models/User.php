@@ -47,21 +47,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
     public function savedPosts(): HasMany
     {
         return $this->hasMany(SavedPost::class);
     }
 
-    public function getProfilePhotoAttribute($value) {
-        return $value ? Storage::url($value) : 'path/to/default/image.jpg';
-    }
 
-    public function getProfilePhotoUrlAttribute()
-{
-    if ($this->profile_photo) {
-        return asset('storage/' . $this->profile_photo);
-    }
-
-    return asset('default-avatar.png');
-}
 }

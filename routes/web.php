@@ -5,6 +5,7 @@ use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\SavedPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,8 +45,16 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+
+
 Route::get('/articles/{article}/comments', [ArticleController::class, 'getComments'])->name('articles.comments.index');
 Route::post('/articles/{article}/comments', [ArticleController::class, 'storeComment'])->name('articles.comments.store');
 
 
 Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+
+
+
+
+
+

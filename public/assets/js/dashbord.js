@@ -186,7 +186,7 @@ function loadComments(articleId) {
     }
 }
 
-/*
+
 function submitComment(articleId) {
     const commentSection = document.getElementById(`comment-section-${articleId}`);
     const textarea = commentSection.querySelector('.comment-textarea');
@@ -211,7 +211,8 @@ function submitComment(articleId) {
     textarea.value = '';
     showNotification('Commentaire ajouté avec succès!');
 }
-*/
+
+/*
 async function submitComment(articleId) {
     const commentSection = document.getElementById(`comment-section-${articleId}`);
     const textarea = commentSection.querySelector('.comment-textarea');
@@ -265,7 +266,7 @@ async function submitComment(articleId) {
     }
 }
 
-
+*/
 
 
 
@@ -404,8 +405,8 @@ function cancelReply(commentId) {
 }
 
 
-
 /*
+
   async function submitComment(articleId) {
     const commentSection = document.getElementById(`comment-section-${articleId}`);
     const textarea = commentSection.querySelector('.comment-textarea');
