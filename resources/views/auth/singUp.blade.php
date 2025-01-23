@@ -15,7 +15,7 @@
 
         </div>
 
-        <form id="signupForm"  action="{{ route('register') }}" method="POST" >
+        <form id="signupForm"  action="{{ route('register') }}" method="POST" enctype="multipart/form-data" >
             @csrf
             <div class="step active" data-step="1">
                 <div class="form-group">

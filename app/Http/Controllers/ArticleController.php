@@ -1,44 +1,74 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Article;
 use App\Models\Theme;
-use App\Models\User;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class articlecontroller extends Controller
 {
     public function index()
     {
-        $articles = Article::with(['user', 'theme'])
+        $articles = Article::with(['creator', 'theme'])
             ->latest()
-            ->get();
-
+            ->paginate(10);
         $themes = Theme::all();
 
-        return view('dashboard', compact('articles', 'themes'));
+        return view('home/dashboard', compact('articles', 'themes'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'title' => 'required|max:255',
             'content' => 'required',
-            'theme_id' => 'required|exists:themes,id',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'required|image|max:1024',
+            'theme_id' => 'required|exists:themes,id'
         ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('articles', 'public');
-            $validated['image'] = $path;
-        }
+        $imagePath = $request->file('image')->store('public/articles');
 
-        $article = auth()->user()->articles()->create($validated);
+        $article = Article::create([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'image' => Storage::url($imagePath),
+            'creator_id' => auth()->id(),
+            'theme_id' => $validated['theme_id'],
+            /*'share_link' => route('articles.show', ['article' => '$id']),*/
+        ]);
 
-        return redirect()->back()->with('success', 'Article publié avec succès');
+        return redirect()->route('dashboard')->with('success', 'Article publié avec succès!');
     }
+
+    public function rate(Request $request, Article $article)
+    {
+        $validated = $request->validate([
+            'stars' => 'required|integer|between:1,5'
+        ]);
+
+        $article->stars_count = $validated['stars'];
+        $article->save();
+
+        return response()->json(['success' => true]);
+    }
+
+
+
+
+
+    public function getComments(Article $article)
+{
+    return response()->json($article->comments()->with('user')->get());
 }
 
-?>
+public function storeComment(Request $request, Article $article)
+{
+    $comment = $article->comments()->create([
+        'content' => $request->content,
+        'user_id' => auth()->id()
+    ]);
 
+    return response()->json($comment->load('user'));
+}
+}

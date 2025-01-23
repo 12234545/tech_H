@@ -1,262 +1,475 @@
-let list = document.querySelectorAll(".navigation li");
-
-function activeLink() {
-  list.forEach((item) => {
-    item.classList.remove("hovered");
-  });
-  this.classList.add("hovered");
-}
-
-list.forEach((item) => item.addEventListener("mouseover", activeLink));
-
-// Menu Toggle le button de cacher le menu des themes
-let toggle = document.querySelector(".toggle");
-let navigation = document.querySelector(".navigation");
-let main = document.querySelector(".main-container");
-
-toggle.onclick = function () {
-  navigation.classList.toggle("active");
-  main.classList.toggle("active");
-};
 document.addEventListener('DOMContentLoaded', () => {
-  // Notation des posts
-  const posts = document.querySelectorAll('.post');
-  posts.forEach(post => {
-      const stars = post.querySelectorAll('.rating .stars i');
-      stars.forEach(star => {
-          star.addEventListener('click', () => {
-              const rating = star.getAttribute('data-value');
-              // Mettre à jour l'affichage des étoiles
-              stars.forEach(s => {
-                  if (s.getAttribute('data-value') <= rating) {
-                      s.classList.add('active');
-                  } else {
-                      s.classList.remove('active');
-                  }
-              });
-              // Sauvegarder la note dans le localStorage
-              const postId = post.getAttribute('data-post-id');
-              localStorage.setItem(`post-${postId}-rating`, rating);
-          });
-
-          // Charger la note depuis le localStorage
-          const postId = post.getAttribute('data-post-id');
-          const savedRating = localStorage.getItem(`post-${postId}-rating`);
-          if (savedRating) {
-              stars.forEach(s => {
-                  if (s.getAttribute('data-value') <= savedRating) {
-                      s.classList.add('active');
-                  } else {
-                      s.classList.remove('active');
-                  }
-              });
-          }
-      });
-  });
-
-
+    // Initialisation des fonctionnalités de base
+    initializeThemeNavigation();
+    initializeArticleActions();
+    initializeComments();
+    initializeScrollToTop();
 });
-//la boite de partage
-const viewbtn = document.querySelector(".partage-button");
-const popup = document.querySelector(".popup");
-const close = popup.querySelector(".close");
-const field = popup.querySelector(".field");
-const input = popup.querySelector(".input1");
-const copier = popup.querySelector(".copier");
 
-viewbtn.onclick = () => {
-  popup.classList.toggle("show");
+function initializeThemeNavigation() {
+    const list = document.querySelectorAll(".navigation li");
+    const toggle = document.querySelector(".toggle");
+    const navigation = document.querySelector(".navigation");
+    const main = document.querySelector(".main-container");
+
+    list.forEach(item => {
+        item.addEventListener("mouseover", function() {
+            list.forEach(el => el.classList.remove("hovered"));
+            this.classList.add("hovered");
+        });
+    });
+
+    toggle?.addEventListener('click', () => {
+        navigation?.classList.toggle("active");
+        main?.classList.toggle("active");
+    });
 }
 
-close.onclick = () => {
-  viewbtn.onclick();
+function initializeArticleActions() {
+    // Gestion des étoiles
+    document.querySelectorAll('.stars').forEach(starsContainer => {
+        starsContainer.addEventListener('click', handleRating);
+    });
+
+    // Gestion du bouton de sauvegarde
+    document.querySelectorAll('.save-button').forEach(button => {
+        button.addEventListener('click', handleSaveArticle);
+    });
+
+    // Gestion du partage
+    document.querySelectorAll('.partage-button').forEach(button => {
+        button.addEventListener('click', handleShare);
+    });
 }
 
-copier.onclick = () => {
-  input.select();
-  if (document.execCommand("copy")) {
-    field.classList.add("active");
-    copier.innerText = "copiee";
+
+
+async function handleRating(e) {
+    if (!e.target.matches('.fa-star')) return;
+
+    const articleId = this.dataset.articleId;
+    const rating = e.target.dataset.value;
+
+    try {
+        const response = await fetch(`/articles/${articleId}/rate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ stars: rating })
+        });
+
+        if (response.ok) {
+            updateStarsDisplay(this, rating);
+            showNotification('Note enregistrée avec succès!');
+        }
+    } catch (error) {
+        showNotification('Erreur lors de la notation', 'error');
+    }
+}
+
+function handleSaveArticle() {
+    this.classList.toggle('saved');
+    const isSaved = this.classList.contains('saved');
+    this.innerHTML = isSaved ?
+        '<i class="fas fa-check"></i> Enregistré' :
+        '<i class="fas fa-bookmark"></i> Enregistrer';
+    showNotification(isSaved ? 'Article enregistré!' : 'Article retiré des enregistrements',
+        isSaved ? 'success' : 'info');
+}
+
+function handleShare(articleId) {
+    const shareUrl = `${window.location.origin}/articles/${articleId}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Partager l\'article',
+            url: shareUrl
+        }).catch(() => {
+            copyToClipboard(shareUrl);
+        });
+    } else {
+        copyToClipboard(shareUrl);
+    }
+}
+
+// Fonctions utilitaires
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 10);
     setTimeout(() => {
-      field.classList.remove("active");
-      copier.innerText = "copier";
-      window.getSelection().removeAllRanges();
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
-  }
 }
-/// Gestion des commentaires
-const posts = document.querySelectorAll('.post');
 
-posts.forEach(post => {
-    const commentButton = post.querySelector('.publish-comment');
-    const commentSection = post.querySelector('.comment-section');
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
 
-    // Créer le bouton commentaire avec icône
-    commentButton.innerHTML = '<ion-icon class="icon-comments" name="chatbox-ellipses-outline"></ion-icon>';
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => showNotification('Lien copié dans le presse-papier!'))
+        .catch(() => showNotification('Erreur lors de la copie', 'error'));
+}
 
-    // Créer la zone de commentaire stylisée
-    const commentArea = `
-        <div class="comment-input-area" style="display: none;">
-            <textarea class="comment-textarea" placeholder="Écrivez votre commentaire..."></textarea>
-            <div class="comment-actions">
-                <button class="submit-comment"><ion-icon class="icon-comments" name="checkmark-done-outline">Publier</ion-icon></button>
-                <button class="cancel-comment"><ion-icon class="icon-comments" name="close-circle-outline">Annuler</ion-icon></button>
+function initializeScrollToTop() {
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}
+
+
+function openModal() {
+    document.getElementById('articleModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('articleModal').style.display = 'none';
+}
+
+// Fermer la modal si on clique en dehors
+window.onclick = function(event) {
+    const modal = document.getElementById('articleModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeComments();
+    initializeRating();
+    initializeButtons();
+});
+
+function toggleCommentSection(articleId) {
+    const commentSection = document.getElementById(`comment-section-${articleId}`);
+    if (commentSection) {
+        const isHidden = commentSection.style.display === 'none';
+        commentSection.style.display = isHidden ? 'block' : 'none';
+
+        if (isHidden) {
+            loadComments(articleId);
+        }
+    }
+}
+
+function loadComments(articleId) {
+    // Simuler le chargement des commentaires depuis le serveur
+    // À remplacer par un vrai appel API
+    const commentList = document.getElementById(`comment-list-${articleId}`);
+    if (commentList) {
+        commentList.innerHTML = ''; // Nettoyer les commentaires existants
+
+        // Exemple de commentaires (à remplacer par les données réelles)
+
+        demoComments.forEach(comment => {
+            addCommentToList(articleId, comment);
+        });
+    }
+}
+
+/*
+function submitComment(articleId) {
+    const commentSection = document.getElementById(`comment-section-${articleId}`);
+    const textarea = commentSection.querySelector('.comment-textarea');
+    const commentText = textarea.value.trim();
+
+    if (!commentText) {
+        showNotification('Le commentaire ne peut pas être vide', 'error');
+        return;
+    }
+
+    // Simuler l'envoi du commentaire au serveur
+    const newComment = {
+        id: Date.now(), // Générer un ID temporaire
+        user: "h",
+        content: commentText,
+        date: new Date()
+    };
+
+    addCommentToList(articleId, newComment);
+
+    // Réinitialiser le formulaire
+    textarea.value = '';
+    showNotification('Commentaire ajouté avec succès!');
+}
+*/
+async function submitComment(articleId) {
+    const commentSection = document.getElementById(`comment-section-${articleId}`);
+    const textarea = commentSection.querySelector('.comment-textarea');
+    const commentText = textarea.value.trim();
+
+    if (!commentText) {
+        showNotification('Le commentaire ne peut pas être vide', 'error');
+        return;
+    }
+
+    try {
+        // Ajout de logs pour déboguer
+        console.log('Envoi du commentaire:', {
+            content: commentText,
+            article_id: articleId
+        });
+
+        const response = await fetch('/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+            },
+            body: JSON.stringify({
+                content: commentText,
+                article_id: articleId
+            })
+        });
+
+        // Ajout de logs pour voir la réponse
+        console.log('Status:', response.status);
+        const responseData = await response.text();
+        console.log('Réponse:', responseData);
+
+        if (response.ok) {
+            const comment = JSON.parse(responseData);
+            addCommentToList(articleId, {
+                id: comment.id,
+                user_name: comment.user_name,
+                content: comment.content,
+                date: comment.date
+            });
+            textarea.value = '';
+            showNotification('Commentaire ajouté avec succès!');
+        } else {
+            showNotification('Erreur lors de l\'envoi du commentaire', 'error');
+        }
+    } catch (error) {
+        console.error('Erreur détaillée:', error);
+        showNotification('Erreur lors de l\'envoi du commentaire', 'error');
+    }
+}
+
+
+
+
+
+
+function addCommentToList(articleId, comment) {
+    const commentList = document.getElementById(`comment-list-${articleId}`);
+    const commentHTML = `
+        <div class="comment" data-comment-id="${comment.id}">
+            <div class="comment-header">
+                <strong>${comment.user}</strong>
+                <span class="comment-date">${formatDate(comment.date)}</span>
             </div>
+            <div class="comment-content">${comment.content}</div>
+            <div class="comment-actions">
+                <br>
+                <button class="edit-comment" onclick="editComment(${comment.id})">
+                    <ion-icon name="create-outline"></ion-icon>
+
+                </button>
+                <button class="delete-comment" onclick="deleteComment(${comment.id})">
+                    <ion-icon name="trash-outline"></ion-icon>
+
+                </button>
+                <button class="reply-comment" onclick="replyToComment(${comment.id})">
+                    <ion-icon name="arrow-undo-outline"></ion-icon>
+
+                </button>
+            </div>
+            <div class="replies"></div>
         </div>
     `;
-    commentSection.insertAdjacentHTML('beforeend', commentArea);
 
-    // Gérer l'affichage de la zone de commentaire
-    commentButton.addEventListener('click', () => {
-        const inputArea = post.querySelector('.comment-input-area');
-        inputArea.style.display = inputArea.style.display === 'none' ? 'block' : 'none';
-    });
-
-    // Gérer la publication des commentaires
-    const submitComment = post.querySelector('.submit-comment');
-    const cancelComment = post.querySelector('.cancel-comment');
-
-    submitComment.addEventListener('click', () => {
-        const textarea = post.querySelector('.comment-textarea');
-        const commentText = textarea.value.trim();
-        if (commentText) {
-            const commentHTML = `
-                <div class="comment">
-                    <div class="comment-content">${commentText}</div><br>
-                    <div class="comment-actions">
-                        <button class="edit-comment"><ion-icon class="icon-comments" name="create-outline">Modifier</ion-icon></button>
-                        <button class="delete-comment"><ion-icon class="icon-comments" name="trash-outline">Supprimer</ion-icon></button>
-                        <button class="reply-comment"><ion-icon class="icon-comments" name="arrow-undo-outline">Répondre</ion-icon></button>
-                    </div>
-                    <div class="replies"></div>
-                </div>
-            `;
-            post.querySelector('.comment-list').insertAdjacentHTML('beforeend', commentHTML);
-            textarea.value = '';
-            post.querySelector('.comment-input-area').style.display = 'none';
-        }
-    });
-
-    cancelComment.addEventListener('click', () => {
-        post.querySelector('.comment-input-area').style.display = 'none';
-    });
-
-    // Délégation d'événements pour les actions sur les commentaires
-    post.querySelector('.comment-list').addEventListener('click', (e) => {
-        const comment = e.target.closest('.comment');
-
-        if (e.target.classList.contains('edit-comment')) {
-            const content = comment.querySelector('.comment-content');
-            const text = content.textContent;
-            content.innerHTML = `
-                <textarea class="edit-textarea">${text}</textarea>
-                <button class="save-edit"><ion-icon class="icon-comments" name="save-outline">Sauvegarder</ion-icon></button><br>
-            `;
-        }
-
-        if (e.target.classList.contains('delete-comment')) {
-            comment.remove();
-        }
-
-        if (e.target.classList.contains('reply-comment')) {
-            const replyArea = `
-                <div class="reply-input-area">
-                    <textarea class="reply-textarea" placeholder="Votre réponse..."></textarea>
-                    <div class="reply-actions">
-                        <button class="submit-reply"><ion-icon class="icon-comments" name="checkmark-done-outline">Publier</ion-icon></button>
-                        <button class="cancel-reply"><ion-icon class="icon-comments" name="close-circle-outline">Annuler</ion-icon></button>
-                    </div>
-                </div>
-            `;
-            comment.querySelector('.replies').insertAdjacentHTML('beforeend', replyArea);
-        }
-
-        if (e.target.classList.contains('save-edit')) {
-            const textarea = comment.querySelector('.edit-textarea');
-            const content = comment.querySelector('.comment-content');
-            content.innerHTML = textarea.value;
-        }
-    });
-
-    // Gérer les réponses
-    post.querySelector('.comment-list').addEventListener('click', (e) => {
-        if (e.target.classList.contains('submit-reply')) {
-            const replyArea = e.target.closest('.reply-input-area');
-            const textarea = replyArea.querySelector('.reply-textarea');
-            const replyText = textarea.value.trim();
-            if (replyText) {
-                const replyHTML = `
-                    <div class="reply">
-                        <div class="reply-content">${replyText}</div>
-                    </div>
-                `;
-                replyArea.insertAdjacentHTML('beforebegin', replyHTML);
-                replyArea.remove();
-            }
-        }
-
-        if (e.target.classList.contains('cancel-reply')) {
-            const replyArea = e.target.closest('.reply-input-area');
-            replyArea.remove();
-        }
-    });
-});
-
-// Sélectionnez le bouton "Enregistrer"
-const saveButton = document.querySelector('.save-button');
-
-// Gestionnaire d'événement pour le clic sur le bouton
-saveButton.addEventListener('click', () => {
-// Vérifiez si le bouton est déjà en mode "Enregistré"
-if (saveButton.classList.contains('saved')) {
-// Si oui, annulez l'enregistrement
-saveButton.classList.remove('saved');
-saveButton.innerHTML = '<i class="fas fa-bookmark"></i> Enregistrer';
- showNotification('Poste désenregistré.', 'error');
-} else {
-     // Sinon, marquez comme enregistré
-        saveButton.classList.add('saved');
-        saveButton.innerHTML = '<i class="fas fa-check"></i> Enregistré';
-        showNotification('Poste enregistré avec succès !');
-    }
-});
-// Fonction pour afficher une notification
-function showNotification(message, type = 'success') {
-  // Vérifiez s'il existe déjà une notification, et la supprimez si c'est le cas
-  const existingNotification = document.querySelector('.notification');
-  if (existingNotification) {
-      existingNotification.remove();
-  }
-
-// Créez une nouvelle notification
-const notification = document.createElement('div');
-notification.className = `notification ${type === 'error' ? 'error' : ''}`;
-notification.textContent = message;
-
-// Ajoutez la notification au body
-document.body.appendChild(notification);
-
-// Affichez la notification
-setTimeout(() => {
-  notification.classList.add('show');
-}, 10);
-
-// Masquez et supprimez la notification après 3 secondes
-setTimeout(() => {
-  notification.classList.remove('show');
-  setTimeout(() => {
-      notification.remove();
-  }, 300);
-}, 3000);
+    commentList.insertAdjacentHTML('beforeend', commentHTML);
 }
-//le bouton de scrolle vers le haut
-            // Back to top functionality
-            const backToTop = document.querySelector('.back-to-top');
-            backToTop.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-//
+
+function cancelComment(articleId) {
+    const commentSection = document.getElementById(`comment-section-${articleId}`);
+    const textarea = commentSection.querySelector('.comment-textarea');
+    textarea.value = '';
+    commentSection.style.display = 'none';
+}
+
+function editComment(commentId) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const contentElement = commentElement.querySelector('.comment-content');
+    const currentContent = contentElement.textContent;
+
+    contentElement.innerHTML = `
+        <textarea class="edit-textarea">${currentContent}</textarea>
+        <div class="edit-actions">
+            <button onclick="saveCommentEdit(${commentId})">Enregistrer</button>
+            <button onclick="cancelCommentEdit(${commentId}, '${currentContent}')">Annuler</button>
+        </div>
+    `;
+}
+
+function saveCommentEdit(commentId) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const textarea = commentElement.querySelector('.edit-textarea');
+    const newContent = textarea.value.trim();
+
+    if (!newContent) {
+        showNotification('Le commentaire ne peut pas être vide', 'error');
+        return;
+    }
+
+    const contentElement = commentElement.querySelector('.comment-content');
+    contentElement.innerHTML = newContent;
+    showNotification('Commentaire modifié avec succès!');
+}
+
+function cancelCommentEdit(commentId, originalContent) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const contentElement = commentElement.querySelector('.comment-content');
+    contentElement.innerHTML = originalContent;
+}
+
+function deleteComment(commentId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
+        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+        commentElement.remove();
+        showNotification('Commentaire supprimé avec succès!');
+    }
+}
+
+function replyToComment(commentId) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const repliesSection = commentElement.querySelector('.replies');
+
+    if (!repliesSection.querySelector('.reply-input-area')) {
+        const replyHTML = `
+            <div class="reply-input-area">
+                <textarea class="reply-textarea" placeholder="Écrivez votre réponse..."></textarea>
+                <div class="reply-actions">
+                    <button onclick="submitReply(${commentId})">Répondre</button>
+                    <button onclick="cancelReply(${commentId})">Annuler</button>
+                </div>
+            </div>
+        `;
+        repliesSection.insertAdjacentHTML('beforeend', replyHTML);
+    }
+}
+
+function submitReply(commentId) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const textarea = commentElement.querySelector('.reply-textarea');
+    const replyText = textarea.value.trim();
+
+    if (!replyText) {
+        showNotification('La réponse ne peut pas être vide', 'error');
+        return;
+    }
+
+    const repliesSection = commentElement.querySelector('.replies');
+    const replyHTML = `
+        <div class="reply">
+            <div class="reply-header">
+                <strong>Utilisateur actuel</strong>
+                <span class="reply-date">${formatDate(new Date())}</span>
+            </div>
+            <div class="reply-content">${replyText}</div>
+        </div>
+    `;
+
+    repliesSection.insertAdjacentHTML('beforeend', replyHTML);
+    cancelReply(commentId);
+    showNotification('Réponse ajoutée avec succès!');
+}
+
+function cancelReply(commentId) {
+    const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+    const replyInputArea = commentElement.querySelector('.reply-input-area');
+    if (replyInputArea) {
+        replyInputArea.remove();
+    }
+}
+
+
+
+/*
+  async function submitComment(articleId) {
+    const commentSection = document.getElementById(`comment-section-${articleId}`);
+    const textarea = commentSection.querySelector('.comment-textarea');
+    const commentText = textarea.value.trim();
+
+    if (!commentText) {
+        showNotification('Le commentaire ne peut pas être vide', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch('/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Si vous utilisez Sanctum
+            },
+            body: JSON.stringify({
+                content: commentText,
+                article_id: articleId,
+            }),
+        });
+
+        if (response.ok) {
+            const newComment = await response.json();
+            addCommentToList(articleId, newComment); // Ajouter le commentaire à la liste
+            textarea.value = ''; // Réinitialiser le champ de texte
+            showNotification('Commentaire ajouté avec succès!');
+        } else {
+            showNotification('Erreur lors de l\'envoi du commentaire', 'error');
+        }
+    } catch (error) {
+        showNotification('Erreur de connexion', 'error');
+    }
+}
+
+function addCommentToList(articleId, comment) {
+    const commentList = document.getElementById(`comment-list-${articleId}`);
+    const commentHTML = `
+        <div class="comment" data-comment-id="${comment.id}">
+            <div class="comment-header">
+                <strong>${comment.user_name}</strong> <!-- Afficher le nom de l'utilisateur -->
+                <span class="comment-date">${formatDate(comment.date)}</span>
+            </div>
+            <div class="comment-content">${comment.content}</div>
+            <div class="comment-actions">
+                <button class="edit-comment" onclick="editComment(${comment.id})">
+                    <ion-icon name="create-outline"></ion-icon>
+                    Modifier
+                </button>
+                <button class="delete-comment" onclick="deleteComment(${comment.id})">
+                    <ion-icon name="trash-outline"></ion-icon>
+                    Supprimer
+                </button>
+                <button class="reply-comment" onclick="replyToComment(${comment.id})">
+                    <ion-icon name="arrow-undo-outline"></ion-icon>
+                    Répondre
+                </button>
+            </div>
+            <div class="replies"></div>
+        </div>
+    `;
+
+    commentList.insertAdjacentHTML('beforeend', commentHTML);
+}
+*/

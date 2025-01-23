@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
@@ -37,10 +37,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function articles()
-    {
-        return $this->hasMany(Article::class);
-    }
+
     /**
      * The attributes that should be cast.
      *
@@ -54,4 +51,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(SavedPost::class);
     }
+
+    public function getProfilePhotoAttribute($value) {
+        return $value ? Storage::url($value) : 'path/to/default/image.jpg';
+    }
+
+    public function getProfilePhotoUrlAttribute()
+{
+    if ($this->profile_photo) {
+        return asset('storage/' . $this->profile_photo);
+    }
+
+    return asset('default-avatar.png');
+}
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\SavedPostController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,13 +27,7 @@ Route::get('/history', [HomeController::class,'history'])
        ->name('app_history')
        ->middleware('auth');
 
- Route::middleware(['auth'])->group(function () {
-        Route::get('/saves', [SavedPostController::class, 'index'])->name('saves.index');
-        Route::post('/saves', [SavedPostController::class, 'store'])->name('saves.store');
-        Route::delete('/saves/{id}', [SavedPostController::class, 'destroy'])->name('saves.destroy');
- });
 
- Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 
 Route::match(['get','post'],'/dashboard',[HomeController::class,'dashboard'])
       ->middleware('auth')
@@ -42,3 +37,15 @@ Route::get('/logOut',[logincontroller::class,'logOut'])
       ->name('app_logOut');
 
 
+Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [ArticleController::class, 'index'])->name('dashboard');
+        Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+        Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');
+    });
+
+
+Route::get('/articles/{article}/comments', [ArticleController::class, 'getComments'])->name('articles.comments.index');
+Route::post('/articles/{article}/comments', [ArticleController::class, 'storeComment'])->name('articles.comments.store');
+
+
+Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
