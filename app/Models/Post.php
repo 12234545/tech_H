@@ -21,9 +21,6 @@ class Post extends Model
     }
 
     // Relation avec les sauvegardes
-    public function saves()
-    {
-        return $this->hasMany(SavedPost::class);
-    }
+
     use HasFactory;
 }

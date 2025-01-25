@@ -5,7 +5,46 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeArticleActions();
     initializeComments();
     initializeScrollToTop();
+
 });
+document.addEventListener('DOMContentLoaded', () => {
+    // Notation des posts
+    const posts = document.querySelectorAll('.post');
+    posts.forEach(post => {
+        const stars = post.querySelectorAll('.rating .stars i');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.getAttribute('data-value');
+                // Mettre à jour l'affichage des étoiles
+                stars.forEach(s => {
+                    if (s.getAttribute('data-value') <= rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+                // Sauvegarder la note dans le localStorage
+                const postId = post.getAttribute('data-post-id');
+                localStorage.setItem(`post-${postId}-rating`, rating);
+            });
+
+            // Charger la note depuis le localStorage
+            const postId = post.getAttribute('data-post-id');
+            const savedRating = localStorage.getItem(`post-${postId}-rating`);
+            if (savedRating) {
+                stars.forEach(s => {
+                    if (s.getAttribute('data-value') <= savedRating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            }
+        });
+    });
+
+
+  });
 
 function initializeThemeNavigation() {
     const list = document.querySelectorAll(".navigation li");
@@ -45,9 +84,7 @@ function initializeArticleActions() {
 
 
 
-async function handleRating(e) {
 
-}
 
 function handleSaveArticle() {
     this.classList.toggle('saved');
@@ -445,3 +482,31 @@ function toggleReplyComment(id){
      element.classList.toggle('hidden');
  }
 
+ function togglepagecomment(){
+     let element = document.getElementById('comment_page');
+     element.classList.toggle('hidden');
+ }
+
+
+ function savePost(articleId) {
+    fetch('/save-article', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ article_id: articleId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            this.classList.toggle('saved');
+    const isSaved = this.classList.contains('saved');
+    this.innerHTML = isSaved ?
+        '<i class="fas fa-check"></i> ' :
+        '<i class="fas fa-bookmark"></i> ';
+         showNotification(isSaved ? 'Article enregistré!' : 'Article retiré des enregistrements',
+        isSaved ? 'success' : 'info');
+        }
+    });
+}

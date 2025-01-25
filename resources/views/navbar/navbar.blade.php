@@ -50,7 +50,7 @@
                      <div class="dropdown-content">
                          <a href="#"><i class='bx bxs-user' style="font-size: 20px"></i> mon profil</a>
                          <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
-                         <a href="" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
+                         <a href="{{ route('saved.articles')}}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
                          <a href="{{ route('app_history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
                      </div>
               </div>
