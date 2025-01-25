@@ -1,0 +1,94 @@
+:root {
+    --dark-background: #121212;
+    --accent-blue: #0f6bc2;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+}
+
+.about {
+    background: linear-gradient(135deg, var(--dark-background) 0%, #1e1e1e 100%);
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aboutkkk h1 {
+    position: relative;
+    font-size: 3rem;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, var(--accent-blue), transparent) 1;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.aboutkkk h1:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 15px rgba(15, 107, 194, 0.5);
+}
+
+.aboutkkk {
+    max-width: 800px;
+    margin: 2rem 0;
+    background: rgba(30, 30, 30, 0.6);
+    border-radius: 15px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.aboutkkk:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.right p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 1.1rem;
+    text-align: justify;
+}
+
+.right strong {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .about h1 {
+        font-size: 2.5rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .aboutkkk {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .right p {
+        font-size: 1rem;
+    }
+}
+
+/* Subtle animation for sections */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.aboutkkk {
+    animation: fadeInUp 0.6s ease-out;
+}

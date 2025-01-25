@@ -15,7 +15,7 @@
           <source src="{{asset('storage/images/a4.mov')}}" type="video/mp4">
     </video>
   </div>
-  <a href="signUp.html" class="btn anim" style="padding: 20px 80px 20px 80px ; font-size: 20px;">Join Now</a>
+  <a  class="btn anim" style="padding: 20px 80px 20px 80px ; font-size: 20px;" href="{{ route('register')}}">Join Now</a>
 </div>
 
 <div class="container1" >
@@ -39,7 +39,7 @@
                 <img src="{{asset('storage/images/cy2.jpg')}}" class="card-image" alt="card image">
                 <p class="badge cyb">Cyber Security</p>
                 <h2 class="card-title">Protéger nos données dans un monde connecté</h2>
-                <button class="card-btn">Read More</button>
+                <button class="card-btn">Read More </button>
           </a>
         </li>
          <li class="card-item swiper-slide">
@@ -48,7 +48,7 @@
                 <p class="badge dev">Web Development</p>
                 <h2 class="card-title">Toward a Faster and More Interactive Web</h2>
 
-                <button class="card-btn">Read More</button>
+                <button class="card-btn" >Read More</button>
           </a>
          </li>
          <li class="card-item swiper-slide">
@@ -56,7 +56,7 @@
                 <img src="{{asset('storage/images/game.jpg')}}" class="card-image" alt="card image">
                 <p class="badge game">Game</p>
                 <h2 class="card-title">The World of Video Games: Innovation and Total Immersion</h2>
-                <button class="card-btn">Read More</button>
+                <button class="card-btn" >Read More</button>
           </a>
          </li>
     </ul>

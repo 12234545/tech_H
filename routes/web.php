@@ -25,6 +25,9 @@ Route::get('/', [HomeController::class,'home'])
 Route::get('/about', [HomeController::class,'about'])
        ->name('app_about');
 
+Route::get('/ourService', [HomeController::class,'ourService'])
+       ->name('app_ourService');
+
 Route::get('/history', [HomeController::class,'history'])
        ->name('app_history')
        ->middleware('auth');
