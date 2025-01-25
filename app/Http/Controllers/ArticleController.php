@@ -57,18 +57,5 @@ class articlecontroller extends Controller
 
 
 
-    public function getComments(Article $article)
-{
-    return response()->json($article->comments()->with('user')->get());
-}
 
-public function storeComment(Request $request, Article $article)
-{
-    $comment = $article->comments()->create([
-        'content' => $request->content,
-        'user_id' => auth()->id()
-    ]);
-
-    return response()->json($comment->load('user'));
-}
 }

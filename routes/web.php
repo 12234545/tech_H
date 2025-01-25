@@ -45,13 +45,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+Route::post('/comments/{article}', [CommentController::class, 'store'])
+    ->name('comments.store');
 
+Route::post('/commentReply/{comment}', [CommentController::class, 'storeCommentReply'])
+    ->name('comments.storeReply');
 
-Route::get('/articles/{article}/comments', [ArticleController::class, 'getComments'])->name('articles.comments.index');
-Route::post('/articles/{article}/comments', [ArticleController::class, 'storeComment'])->name('articles.comments.store');
-
-
-Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 
 

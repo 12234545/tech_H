@@ -7,23 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class comment extends Model
 {
+    protected $guarded = [];
 
-    use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'article_id',
-        'content',
-    ];
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
 
-    // Relation avec l'utilisateur
+
+    public function comments(){
+        return $this->morphMany(Comment::class, 'commentable')->latest();
+    }
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relation avec l'article
-    public function article()
-    {
-        return $this->belongsTo(Article::class);
-    }
+    use HasFactory;
 }

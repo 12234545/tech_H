@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialisation des fonctionnalités de base
     initializeThemeNavigation();
@@ -45,36 +46,15 @@ function initializeArticleActions() {
 
 
 async function handleRating(e) {
-    if (!e.target.matches('.fa-star')) return;
 
-    const articleId = this.dataset.articleId;
-    const rating = e.target.dataset.value;
-
-    try {
-        const response = await fetch(`/articles/${articleId}/rate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ stars: rating })
-        });
-
-        if (response.ok) {
-            updateStarsDisplay(this, rating);
-            showNotification('Note enregistrée avec succès!');
-        }
-    } catch (error) {
-        showNotification('Erreur lors de la notation', 'error');
-    }
 }
 
 function handleSaveArticle() {
     this.classList.toggle('saved');
     const isSaved = this.classList.contains('saved');
     this.innerHTML = isSaved ?
-        '<i class="fas fa-check"></i> Enregistré' :
-        '<i class="fas fa-bookmark"></i> Enregistrer';
+        '<i class="fas fa-check"></i> ' :
+        '<i class="fas fa-bookmark"></i> ';
     showNotification(isSaved ? 'Article enregistré!' : 'Article retiré des enregistrements',
         isSaved ? 'success' : 'info');
 }
@@ -159,17 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeButtons();
 });
 
-function toggleCommentSection(articleId) {
-    const commentSection = document.getElementById(`comment-section-${articleId}`);
-    if (commentSection) {
-        const isHidden = commentSection.style.display === 'none';
-        commentSection.style.display = isHidden ? 'block' : 'none';
 
-        if (isHidden) {
-            loadComments(articleId);
-        }
-    }
-}
 
 function loadComments(articleId) {
     // Simuler le chargement des commentaires depuis le serveur
@@ -186,7 +156,7 @@ function loadComments(articleId) {
     }
 }
 
-
+/*nouhaila
 function submitComment(articleId) {
     const commentSection = document.getElementById(`comment-section-${articleId}`);
     const textarea = commentSection.querySelector('.comment-textarea');
@@ -211,8 +181,9 @@ function submitComment(articleId) {
     textarea.value = '';
     showNotification('Commentaire ajouté avec succès!');
 }
+*/
 
-/*
+
 async function submitComment(articleId) {
     const commentSection = document.getElementById(`comment-section-${articleId}`);
     const textarea = commentSection.querySelector('.comment-textarea');
@@ -266,7 +237,7 @@ async function submitComment(articleId) {
     }
 }
 
-*/
+
 
 
 
@@ -337,20 +308,14 @@ function saveCommentEdit(commentId) {
     contentElement.innerHTML = newContent;
     showNotification('Commentaire modifié avec succès!');
 }
-
+//NONO
 function cancelCommentEdit(commentId, originalContent) {
     const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
     const contentElement = commentElement.querySelector('.comment-content');
     contentElement.innerHTML = originalContent;
 }
 
-function deleteComment(commentId) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
-        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
-        commentElement.remove();
-        showNotification('Commentaire supprimé avec succès!');
-    }
-}
+
 
 function replyToComment(commentId) {
     const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
@@ -474,3 +439,9 @@ function addCommentToList(articleId, comment) {
     commentList.insertAdjacentHTML('beforeend', commentHTML);
 }
 */
+
+function toggleReplyComment(id){
+     let element = document.getElementById('replyComment-'+id);
+     element.classList.toggle('hidden');
+ }
+
