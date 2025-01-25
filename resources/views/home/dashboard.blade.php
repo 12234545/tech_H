@@ -204,11 +204,7 @@
 @section('title', 'dashboard')
 
 @section('content')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<script>
-    // Passer les données de l'utilisateur au JavaScript
-    window.userName = "{{ Auth::user()->name }}";
-</script>
+
 <div class="container5">
     <div class="main-container">
         <aside class="navigation">
@@ -263,67 +259,8 @@
                 </form>
             </div>
         </div>
-
-            <!-- Liste des articles -->
-            {{--
-            @foreach($articles as $article)
-            <div class="post" data-post-id="{{ $article->id }}">
-                <div class="post-header">
-                    <div class="post-avatar">
-                        <img src="{{$article->creator->profile_photo }}" alt="">
-                    </div>
-                    <div class="post-meta">
-                        <strong>{{ $article->creator->name }}</strong>
-                        <div>{{ $article->created_at->diffForHumans() }}</div>
-                    </div>
-                </div>
-                <div>
-                    <img src="{{ $article->image }}" alt="{{ $article->title }}">
-                </div>
-                <h3>{{ $article->title }}</h3>
-                <p style="color: black">{{ $article->content }}</p>
-
-                <div class="post-options">
-                    <div class="rating">
-                        <span class="stars" data-article-id="{{ $article->id }}">
-                            @for($i = 1; $i <= 5; $i++)
-                                <i class="fas fa-star {{ $i <= $article->stars_count ? 'active' : '' }}" data-value="{{ $i }}"></i>
-                            @endfor
-                        </span>
-                    </div>
-                    <div class="save-post">
-                        <button class="partage-button" data-share-link="{{ $article->share_link }}">
-                            <ion-icon name="paper-plane-outline"></ion-icon>
-                        </button>
-                        <button class="save-button">
-                            <i class="fas fa-bookmark"></i> Enregistrer
-                        </button>
-                        <div class="comment-section">
-                            <button class="publish-comment">
-
-                            </button>
-                            <div class="comments">
-                                <div class="comment-list"></div>
-                            </div>
-                        </div>
-                        <div class="popup">
-
-                            <div class="header-partage">
-                                <span class="title-share">partager</span>
-                                <div class="close"> <ion-icon name="close-outline"></ion-icon></div>
-                            </div>
-                    </div>
-
-                  <!-- #region partage -->
-
-                </div>
-
-            </div>
-
-            @endforeach
-            --}}
             <div class="listhhhh">
-            @foreach($articles as $article)
+             @foreach($articles as $article)
                      <div class="post">
                          <div class="post-header">
                              <div class="post-avatar">
@@ -335,25 +272,80 @@
                                </div>
                          </div>
 
-                          <img src="{{ $article->image }}" alt="{{ $article->title }}">
+                          <img id="imageARTICLE" src="{{ $article->image }}" alt="{{ $article->title }}">
                           <h3>{{ $article->title }}</h3>
                           <p>{{ $article->content }}</p>
 
                           <div class="rating">
-                          <span class="stars">
-                               <i class="fas fa-star" data-value="1"></i>
-                               <i class="fas fa-star" data-value="2"></i>
-                               <i class="fas fa-star" data-value="3"></i>
-                               <i class="fas fa-star" data-value="4"></i>
-                               <i class="fas fa-star" data-value="5"></i>
-                           </span>
+                             <span class="stars">
+                                   <i class="fas fa-star" data-value="1"></i>
+                                   <i class="fas fa-star" data-value="2"></i>
+                                   <i class="fas fa-star" data-value="3"></i>
+                                   <i class="fas fa-star" data-value="4"></i>
+                                   <i class="fas fa-star" data-value="5"></i>
+                              </span>
+                           <div>
+                            @forelse($article->comments as $comment)
+                              <div class="comment" id="comment_reply-{{$comment->id}}" >
+                                  <strong>{{ $comment->user->name }}</strong> <span>   {{ $comment->created_at->diffForHumans() }}</span>
+                                  <p>{{ $comment->content }}</p>
+                                  <form action="{{ route('comments.destroy', $comment) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-comment" onclick="return showNotification('supprimer avec succès')">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </form>
+                              </div>
+                              @foreach ($comment->comments as $reply)
+                              <div class="comment_reply" id="comment_reply-{{$reply->id}}">
+                                <strong>{{ $reply->user->name }}</strong><span>{{ $reply->created_at->diffForHumans() }}</span>
+                                <p>{{ $reply->content }}</p>
+                                <form action="{{ route('comments.destroy', $reply) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-comment" onclick="return showNotification('supprimer avec succès')">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </form>
+                              </div>
+                              @endforeach
+                             <button id="commentReplyId" class="comment-reply" onclick="toggleReplyComment({{ $comment->id }})"><i class="fas fa-reply"></i> </button>
+                             <form   action="{{ route('comments.storeReply',$comment)}}" method="POST" id="replyComment-{{$comment->id}}" class="hidden">
+                                 @csrf
+                                 <div class="form-replay">
+                                        <input type="text" name="contentreply" id="contentreply" placeholder="Écrivez votre réponse..." style="color: black" @error('contentreply')
+                                           is-invalid
+                                        @enderror>
+                                        <button type="submit" class="submit-comment">
+                                            <ion-icon name="checkmark-done-outline"></ion-icon>
+                                        </button>
+                                 </div>
+                             </form>
 
+                            @empty
+                                <hr style="color: rgb(188, 185, 185)">
+                                <br>
+                                <p>Aucun commentaire</p>
+                            @endforelse
 
                            <div class="post-actions" >
-                                 <button class="comment-button" onclick="toggleCommentSection({{ $article->id }})">
-                                       <ion-icon class="icon-comments" name="chatbox-ellipses-outline"></ion-icon>
-                                  </button>
-
+                              <div class="comment_partie">
+                                 <form action="{{ route('comments.store',$article)}}" method="POST">
+                                     @csrf
+                                     <div class="comment-section">
+                                        <div class="comment-input-area">
+                                            <textarea type="text" name="content" class="comment-textarea" placeholder="Écrivez votre commentaire..."  style="color: black"></textarea>
+                                            <div class="comment-actions">
+                                                <button type="submit" class="submit-comment">
+                                                    <ion-icon name="checkmark-done-outline"></ion-icon>
+                                                </button>
+                                          </div>
+                                       </div>
+                                     </div>
+                                 </form>
+                              </div>
+                               <div class="save_share_partie">
                                   <button class="partage-button" onclick="sharePost({{ $article->id }})">
                                         <ion-icon name="paper-plane-outline"></ion-icon>
                                   </button>
@@ -361,23 +353,14 @@
                                   <button class="save-button" onclick="savePost({{ $article->id }})">
                                        <i class="fas fa-bookmark"></i>
                                   </button>
+                               </div>
                             </div>
+
                      </div>
-                     <div class="comment-section" id="comment-section-{{ $article->id }}" style="display: none;">
-                     <div class="comment-input-area">
-                          <textarea class="comment-textarea" placeholder="Écrivez votre commentaire..."></textarea>
-                          <div class="comment-actions">
-                          <button class="submit-comment" onclick="submitComment({{ $article->id }})">
-                               <ion-icon name="checkmark-done-outline"></ion-icon>
-                          </button>
-                          <button class="cancel-comment" onclick="cancelComment({{ $article->id }})">
-                                <ion-icon name="close-circle-outline"></ion-icon>
-                          </button>
-                      </div>
-                 </div>
-                  <div class="comment-list" id="comment-list-{{ $article->id }}"></div>
+
              </div>
          </div>
+
       @endforeach
             {{ $articles->links() }}
 </main>

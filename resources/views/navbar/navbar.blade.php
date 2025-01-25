@@ -42,8 +42,6 @@
           @auth
 
             <div class="user-bar">
-                <img src="{{ Auth::user()->profile_photo}}" alt="Profile Photo">
-
                 <p style="color: white; font-size: 20px; padding: 10px">{{ Auth::user()->name }}</p>
                 <div class="profile-dropdown" >
                      <div class="profile-img">

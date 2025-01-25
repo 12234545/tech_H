@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('creator_id')->constrained('users'); // Clé étrangère vers la table users
-            $table->foreignId('article_id')->constrained('articles');// Clé étrangère vers la table articles
-            $table->text('content'); // Contenu du commentaire
-            $table->timestamps(); // created_at et updated_at
+            $table->text('content');
+            $table->unsignedBigInteger('user_id');
+            $table->integer('commentable_id');
+            $table->string('commentable_type');
+            $table->timestamps();
         });
     }
 

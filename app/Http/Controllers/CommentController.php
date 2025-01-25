@@ -2,44 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\article;
+use App\Models\comment;
 use Illuminate\Http\Request;
-
-use App\Models\Comment;
-use Illuminate\Support\Facades\Auth;
-
-
 
 class CommentController extends Controller
 {
-    public function store(Request $request)
+    public function __construct()
     {
-        try {
-            $request->validate([
-                'content' => 'required|string',
-                'article_id' => 'required|exists:articles,id',
-            ]);
-
-            $user = Auth::user();
-
-            if (!$user) {
-                return response()->json(['error' => 'Utilisateur non authentifié'], 401);
-            }
-
-            $comment = Comment::create([
-                'user_id' => $user->id,
-                'article_id' => $request->input('article_id'),
-                'content' => $request->input('content'),
-            ]);
-
-            return response()->json([
-                'id' => $comment->id,
-                'user_name' => $user->name,
-                'content' => $comment->content,
-                'date' => $comment->created_at,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Erreur lors de la création du commentaire'], 500);
-
-        }
+        $this->middleware('auth');
     }
+
+    public function store(article $article)
+    {
+        request()->validate([
+            'content' => 'required|min:3'
+        ]);
+
+        $comment = new comment();
+        $comment->content = request('content');
+        $comment->user_id = auth()->user()->id;
+
+        $article->comments()->save($comment);
+
+        return redirect()->route('dashboard', $article);
+    }
+
+    public function storeCommentReply(comment $comment)
+    {
+        request()->validate([
+            'contentreply' => 'required|min:3'
+        ]);
+
+        $reply = new comment();
+        $reply->content = request('contentreply');
+        $reply->user_id = auth()->user()->id;
+
+        $comment->comments()->save($reply);
+
+        return redirect()->back();
+
+    }
+
+    public function destroy(Comment $comment)
+{
+    if (auth()->user()->id !== $comment->user_id) {
+        return back()->with('error', 'Vous n\'êtes pas autorisé à supprimer ce commentaire');
+    }
+
+    // Supprimer les réponses associées
+    $comment->comments()->delete();
+
+    // Supprimer le commentaire
+    $comment->delete();
+
+    return back()->with('success', 'Commentaire supprimé avec succès');
+}
 }

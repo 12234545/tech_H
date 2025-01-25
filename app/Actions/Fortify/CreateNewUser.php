@@ -25,7 +25,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         /*
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+
             'email' => [
                 'required',
                 'string',
@@ -34,7 +34,11 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-        ])->validate();*/
+            'profile-photo-required'=> ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+
+        ])->validate();
+        */
+
 
 
         $name = $input['firstname'] . ' ' . $input['lastname'];
@@ -45,7 +49,7 @@ class CreateNewUser implements CreatesNewUsers
         'name' => $name,
         'email' => $input['email'],
         'password' => Hash::make($input['password']),
-        'profile_photo' => $input['profile-photo'],
+        'profile_photo' => $input['profile_photo'],
         'description' => $input['description'],
     ]);
         }
