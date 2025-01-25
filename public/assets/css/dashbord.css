@@ -679,6 +679,7 @@
 .comment{
     border-left: 4px solid #0f6bc2;
     margin-top: 5px;
+
 }
 
 .comment strong{
@@ -718,6 +719,8 @@
     margin-top: 5px;
     margin-left: 50px;
     display: flex;
+    scale: 0.8;
+
 }
 #contentreply{
     border: none;
@@ -744,4 +747,15 @@
     height: 400px;
     border-radius: 4px;
     margin-bottom: 15px;
+}
+
+#comment_page_chacher{
+    border: none;
+    background: white;
+
+}
+
+.comment_page{
+    overflow: auto;
+    max-height: 200px;
 }

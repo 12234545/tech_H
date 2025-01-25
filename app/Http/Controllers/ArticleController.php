@@ -6,8 +6,10 @@ use App\Models\Theme;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
+
 class articlecontroller extends Controller
 {
+    /*
     public function index()
     {
         $articles = Article::with(['creator', 'theme'])
@@ -15,8 +17,30 @@ class articlecontroller extends Controller
             ->paginate(10);
         $themes = Theme::all();
 
+
+
         return view('home/dashboard', compact('articles', 'themes'));
+    }*/
+
+    public function index(Request $request)
+{
+    $query = Article::with(['creator', 'theme'])->latest();
+
+    // If a theme is selected, filter articles by theme
+    if ($request->has('theme_id')) {
+        $query->where('theme_id', $request->theme_id);
     }
+
+    // If Nouveautés is selected, show articles from the last 7 days
+    if ($request->has('nouveautes')) {
+        $query->where('created_at', '>=', now()->subDays(7));
+    }
+
+    $articles = $query->paginate(10);
+    $themes = Theme::all();
+
+    return view('home/dashboard', compact('articles', 'themes'));
+}
 
     public function store(Request $request)
     {

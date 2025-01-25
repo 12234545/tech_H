@@ -207,6 +207,7 @@
 
 <div class="container5">
     <div class="main-container">
+        {{--
         <aside class="navigation">
             <ul>
                 <li>
@@ -225,6 +226,33 @@
                 @endforeach
             </ul>
         </aside>
+        --}}
+        <aside class="navigation">
+            <ul>
+                <li>
+                    <a href="{{ route('dashboard') }}">
+                        <span class="icon"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></span>
+                        <span class="title">Tous les Thèmes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard', ['nouveautes' => true]) }}">
+                        <span class="icon"><ion-icon name="analytics-outline"></ion-icon></span>
+                        <span class="title">Nouveautés</span>
+                    </a>
+                </li>
+                @foreach($themes as $theme)
+                <li>
+                    <a href="{{ route('dashboard', ['theme_id' => $theme->id]) }}">
+                        <span class="icon"><ion-icon name="{{ $theme->icon }}"></ion-icon></span>
+                        <span class="title">{{ $theme->name }}</span>
+                    </a>
+                </li>
+                @endforeach
+
+            </ul>
+        </aside>
+        {{----}}
         <div class="toggle">
             <ion-icon name="swap-horizontal-outline"></ion-icon>
         </div>
@@ -284,11 +312,15 @@
                                    <i class="fas fa-star" data-value="4"></i>
                                    <i class="fas fa-star" data-value="5"></i>
                               </span>
+                              <br>
+                              <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Commentaires<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
+                        <div class="comment_page" id="comment_page">
                            <div>
                             @forelse($article->comments as $comment)
                               <div class="comment" id="comment_reply-{{$comment->id}}" >
                                   <strong>{{ $comment->user->name }}</strong> <span>   {{ $comment->created_at->diffForHumans() }}</span>
                                   <p>{{ $comment->content }}</p>
+                                  @if(Auth::id() == $comment->user_id)
                                   <form action="{{ route('comments.destroy', $comment) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -296,11 +328,13 @@
                                         <ion-icon name="trash-outline"></ion-icon>
                                     </button>
                                 </form>
+                                @endif
                               </div>
                               @foreach ($comment->comments as $reply)
                               <div class="comment_reply" id="comment_reply-{{$reply->id}}">
                                 <strong>{{ $reply->user->name }}</strong><span>{{ $reply->created_at->diffForHumans() }}</span>
                                 <p>{{ $reply->content }}</p>
+                                @if(Auth::id() == $reply->user_id)
                                 <form action="{{ route('comments.destroy', $reply) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -308,6 +342,7 @@
                                         <ion-icon name="trash-outline"></ion-icon>
                                     </button>
                                 </form>
+                                @endif
                               </div>
                               @endforeach
                              <button id="commentReplyId" class="comment-reply" onclick="toggleReplyComment({{ $comment->id }})"><i class="fas fa-reply"></i> </button>
@@ -328,7 +363,8 @@
                                 <br>
                                 <p>Aucun commentaire</p>
                             @endforelse
-
+                           </div>
+                        </div>
                            <div class="post-actions" >
                               <div class="comment_partie">
                                  <form action="{{ route('comments.store',$article)}}" method="POST">
@@ -349,14 +385,22 @@
                                   <button class="partage-button" onclick="sharePost({{ $article->id }})">
                                         <ion-icon name="paper-plane-outline"></ion-icon>
                                   </button>
-
+                                  {{--
                                   <button class="save-button" onclick="savePost({{ $article->id }})">
                                        <i class="fas fa-bookmark"></i>
                                   </button>
+                                  --}}
+                                  <form action="{{ route('articles.save') }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <input type="hidden" name="article_id" value="{{ $article->id }}">
+                                    <button type="submit" class="save-button">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </form>
                                </div>
                             </div>
 
-                     </div>
+
 
              </div>
          </div>

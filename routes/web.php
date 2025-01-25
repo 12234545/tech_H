@@ -6,6 +6,7 @@ use App\Http\Controllers\SavedPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SavedArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,14 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/save-article', [SavedArticleController::class, 'save'])
+        ->name('articles.save');
+    Route::get('/saved-articles', [SavedArticleController::class, 'index'])
+        ->name('saved.articles');
+    Route::delete('/unsave-article/{id}', [SavedArticleController::class, 'unsave'])
+        ->name('articles.unsave');
+});
 
 
 
