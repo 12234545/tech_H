@@ -28,6 +28,13 @@ class HomeController extends Controller
     }
 
 
+    public function ourService()
+    {
+        return view('home/ourServices');
+    }
+
+
+
 
 
 

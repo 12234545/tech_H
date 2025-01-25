@@ -86,16 +86,6 @@ function initializeArticleActions() {
 
 
 
-function handleSaveArticle() {
-    this.classList.toggle('saved');
-    const isSaved = this.classList.contains('saved');
-    this.innerHTML = isSaved ?
-        '<i class="fas fa-check"></i> ' :
-        '<i class="fas fa-bookmark"></i> ';
-    showNotification(isSaved ? 'Article enregistré!' : 'Article retiré des enregistrements',
-        isSaved ? 'success' : 'info');
-}
-
 function handleShare(articleId) {
     const shareUrl = `${window.location.origin}/articles/${articleId}`;
 
@@ -488,25 +478,4 @@ function toggleReplyComment(id){
  }
 
 
- function savePost(articleId) {
-    fetch('/save-article', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ article_id: articleId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            this.classList.toggle('saved');
-    const isSaved = this.classList.contains('saved');
-    this.innerHTML = isSaved ?
-        '<i class="fas fa-check"></i> ' :
-        '<i class="fas fa-bookmark"></i> ';
-         showNotification(isSaved ? 'Article enregistré!' : 'Article retiré des enregistrements',
-        isSaved ? 'success' : 'info');
-        }
-    });
-}
+

@@ -9,28 +9,33 @@
            <ul>
                <li><a  href="{{ route('app_home') }}" >Home</a></li>
                <li><a  href="{{ route('app_about') }}" >About Us</a></li>
+               @auth
+               <li><a  href="{{ route('dashboard') }}" >Community</a></li>
+               @endauth
+               @guest
                <li><a href="#" >Themes</a>
                   <div class="mega-box">
                       <div class="contentmaga">
                            <div class="row">
-                                 <header><a>AI</a></header>
+                                 <header><a href="{{ route('login')}}">AI</a></header>
                                  <img src="{{asset('storage/images/AI.png')}}" alt="">
                            </div>
                            <div class="row">
-                                 <header><a> CYBER SECURITY</a></header>
+                                 <header><a href="{{ route('login')}}"> CYBER SECURITY</a></header>
                                  <img src="{{asset('storage/images/CYB.png')}} " alt="">
                            </div>
                            <div class="row">
-                                <header><a> WEB DEVELOPMENT </a></header>
+                                <header><a href="{{ route('login')}}"> WEB DEVELOPMENT </a></header>
                                 <img src="{{asset('storage/images/DEV.png')}}" alt="">
                           </div>
                           <div class="row">
-                                <header><a> OTHERS </a></header>
+                                <header><a href="{{ route('login')}}"> OTHERS </a></header>
                                 <i class='bx bx-play'></i>
                           </div>
                       </div>
                    </div>
                </li>
+               @endguest
           </ul>
        </section>
        <div>

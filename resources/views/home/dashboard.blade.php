@@ -314,7 +314,7 @@
                               </span>
                               <br>
                               <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Commentaires<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
-                        <div class="comment_page" id="comment_page">
+                        <div class="comment_page hidden" id="comment_page" >
                            <div>
                             @forelse($article->comments as $comment)
                               <div class="comment" id="comment_reply-{{$comment->id}}" >
@@ -393,7 +393,7 @@
                                   <form action="{{ route('articles.save') }}" method="POST" style="display:inline;">
                                     @csrf
                                     <input type="hidden" name="article_id" value="{{ $article->id }}">
-                                    <button type="submit" class="save-button">
+                                    <button type="submit" class="save-button" onclick="return showNotification('Enregistrer avec succès')" >
                                         <i class="fas fa-bookmark"></i>
                                     </button>
                                 </form>
