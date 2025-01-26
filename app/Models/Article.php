@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class article extends Model
 {
     protected $fillable = [
@@ -32,6 +33,11 @@ class article extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')->latest();
     }
+
+    public function ratings()
+{
+    return $this->hasMany(Rating::class);
+}
 
     use HasFactory;
 }
