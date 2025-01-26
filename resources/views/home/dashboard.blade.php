@@ -291,9 +291,16 @@
              @foreach($articles as $article)
                      <div class="post">
                          <div class="post-header">
+                            {{--
                              <div class="post-avatar">
                                 <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile Photo">
                              </div>
+                             --}}
+                             <div class="post-avatar" data-initial="{{ substr(Auth::user()->name, 0, 1) }}">
+                                <div class="modern-notification-avatar">
+                                    {{ substr($article->creator->name, 0, 1) }}
+                                </div>
+                            </div>
                               <div class="post-meta">
                                     <strong>{{ $article->creator->name }}</strong>
                                     <div>{{ $article->created_at->diffForHumans() }}</div>
@@ -312,9 +319,23 @@
                                    <i class="fas fa-star" data-value="4"></i>
                                    <i class="fas fa-star" data-value="5"></i>
                               </span>
+
+                              {{--
+                              <div class="rating">
+                                <form action="{{ route('articles.rate', $article) }}" method="POST" class="rating-form">
+                                    @csrf
+                                    <span class="stars">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <button type="submit" name="rating" value="{{ $i }}" class="star-btn">
+                                                <i class="fas fa-star" data-value="{{ $i }}"></i>
+                                            </button>
+                                        @endfor
+                                    </span>
+                                </form>
+                                --}}
                               <br>
                               <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Commentaires<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
-                        <div class="comment_page hidden" id="comment_page" >
+                        <div class="comment_page " id="comment_page" >
                            <div>
                             @forelse($article->comments as $comment)
                               <div class="comment" id="comment_reply-{{$comment->id}}" >
@@ -414,5 +435,50 @@
         <i class="fas fa-arrow-up"></i>
     </a>
 </div>
+
+
+{{--
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var highlightedElement = document.querySelector('.highlighted');
+        if (highlightedElement) {
+            highlightedElement.classList.remove('highlighted');
+        }
+
+        @if(isset($highlightCommentId))
+            var commentElement = document.getElementById('comment_reply-{{ $highlightCommentId }}');
+            if (commentElement) {
+                commentElement.scrollIntoView({ behavior: 'smooth' });
+                commentElement.classList.add('highlighted');
+            }
+        @endif
+    });
+</script>
+--}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var highlightedElement = document.querySelector('.highlighted');
+        if (highlightedElement) {
+            highlightedElement.classList.remove('highlighted');
+        }
+
+        @if(isset($highlightCommentId))
+            var commentElement = document.getElementById('comment_reply-{{ $highlightCommentId }}');
+            if (commentElement) {
+                commentElement.scrollIntoView({ behavior: 'smooth' });
+                commentElement.classList.add('highlighted');
+            }
+        @endif
+    });
+</script>
+
+<style>
+    .highlighted {
+        background-color: rgb(239, 239, 199);
+        transition: background-color 1s ease;
+    }
+</style>
+
+
 
 @endsection

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SavedArticleController;
+use App\Http\Controllers\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -70,3 +72,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
+Route::get('showFromNotification/{article}/{notification}', [ArticleController::class, 'showFromNotification'])
+    ->name('Article.showFromNotification');
+
+
+
+    Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');

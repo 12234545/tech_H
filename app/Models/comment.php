@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\DatabaseNotification;
 
 class comment extends Model
 {
@@ -24,6 +25,9 @@ class comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+
 
     use HasFactory;
 }
