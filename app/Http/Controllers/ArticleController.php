@@ -5,7 +5,8 @@ use App\Models\Article;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-
+use Illuminate\Notifications\DatabaseNotification;
+use App\Notifications\NewRatingPosted;
 
 class articlecontroller extends Controller
 {
@@ -65,19 +66,46 @@ class articlecontroller extends Controller
         return redirect()->route('dashboard')->with('success', 'Article publié avec succès!');
     }
 
-    public function rate(Request $request, Article $article)
+
+
+
+
+/*
+    public function showFromNotification(Article $article, DatabaseNotification $notification)
     {
-        $validated = $request->validate([
-            'stars' => 'required|integer|between:1,5'
-        ]);
+        $notification->markAsRead();
 
-        $article->stars_count = $validated['stars'];
-        $article->save();
+        return view('home/dashboard', compact('article'));
 
-        return response()->json(['success' => true]);
     }
+*/
+public function showFromNotification(Article $article, DatabaseNotification $notification)
+{
+    $notification->markAsRead();
 
+    $themes = Theme::all();
 
+    return view('home/dashboard', [
+        'articles' => Article::with(['creator', 'theme'])->latest()->paginate(10),
+        'themes' => $themes,
+        'selectedArticle' => $article,
+        'highlightCommentId' => $notification->data['comment_id']
+    ]);
+}
+
+public function rate(Request $request, Article $article)
+{
+    $rating = $request->input('rating');
+
+    $article->ratings()->create([
+        'user_id' => auth()->id(),
+        'rating' => $rating
+    ]);
+
+    $article->creator->notify(new NewRatingPosted($article, auth()->user(), $rating));
+
+    return redirect()->back()->with('success', 'Note enregistrée avec succès');
+}
 
 
 
