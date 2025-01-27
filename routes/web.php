@@ -8,6 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SavedArticleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ArticleHistoryController;
 
 
 /*
@@ -30,9 +31,9 @@ Route::get('/about', [HomeController::class,'about'])
 Route::get('/ourService', [HomeController::class,'ourService'])
        ->name('app_ourService');
 
-Route::get('/history', [HomeController::class,'history'])
-       ->name('app_history')
-       ->middleware('auth');
+ //Route::get('/history', [HomeController::class,'history'])
+       //->name('app_history')
+       //->middleware('auth');
 
 
 
@@ -84,3 +85,18 @@ Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->nam
 
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/article-history', [ArticleHistoryController::class, 'index'])
+        ->name('article.history');
+
+    Route::patch('/article-history/{id}', [ArticleHistoryController::class, 'updateStatus'])
+        ->name('article.history.update');
+});
+
+Route::post('/article-history/search', [ArticleHistoryController::class, 'search'])
+    ->name('article.history.search')
+    ->middleware('auth');
+
+Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'showSearchResult'])
+    ->name('article.history.show')
+    ->middleware('auth');

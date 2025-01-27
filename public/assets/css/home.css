@@ -41,34 +41,7 @@
     width: 150px;
  }
 
- .find{
-   height: 30px;
-   display: flex;
-   cursor: pointer;
-   padding: 10px 20px;
-   background: #fff;
-   border-radius: 30px;
-   align-items: center;
-   box-shadow: 0 10px 25px rgba(5, 5, 5, 0.3);
- }
 
- .find:hover input{
-    width: 200px;
- }
-
- .find input{
-    width: 0;
-    outline: none;
-    border: none;
-    font-weight: 500;
-    transition: 0.8s;
-    background: transparent;
- }
-
- .find i{
-    font-size: 18px;
-    color: #330a9b;
- }
  .nav-section{
    margin-top: 30px;
    height: 10vh;

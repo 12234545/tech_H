@@ -84,7 +84,9 @@ class articlecontroller extends Controller
         'highlightCommentId' => $notification->data['comment_id']
     ]);
 }
+
 */
+
 
 public function showFromNotification(Article $article, DatabaseNotification $notification)
 {
@@ -104,16 +106,17 @@ public function showFromNotification(Article $article, DatabaseNotification $not
          $notification->data['notification_type'] === 'reply') &&
         isset($notification->data['comment_id'])) {
         $viewData['highlightCommentId'] = $notification->data['comment_id'];
+        return view('home/dashboard', $viewData);
     }
-    else{
+    else  {
+        $notification->data['notification_type'] === 'rating';
         return view('home/dashboard', [
             'articles' => Article::with(['creator', 'theme'])->latest()->paginate(10),
             'themes' => $themes,
             'selectedArticle' => $article,
-
         ]);
     }
-    return view('home/dashboard', $viewData);
+
 }
 
 
@@ -151,6 +154,18 @@ public function rate(Request $request, Article $article)
 }
 
 
+
+
+
+public function show($id)
+{
+    $article = Article::findOrFail($id);
+
+    // Ajouter à l'historique
+    ArticleHistoryController::addToHistory($article->id);
+
+    return view('dashboard', compact('article'));
+}
 
 
 }

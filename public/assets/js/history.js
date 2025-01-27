@@ -1,3 +1,4 @@
+/*
 function filterHistory(theme) {
     const filterButtons = document.querySelectorAll('.filter-chip');
     const historyItems = document.querySelectorAll('.history-item');
@@ -52,3 +53,132 @@ function searchHistory() {
 
 // Initialisation : afficher tout l'historique par défaut
 window.onload = () => filterHistory('all');
+
+*/
+
+
+
+
+
+
+
+
+
+//////////////////////////////
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.find input');
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'search-suggestions';
+    searchInput.parentElement.appendChild(suggestionsContainer);
+
+    let searchTimeout;
+
+    // Gestionnaire de recherche
+    searchInput.addEventListener('input', function(e) {
+        clearTimeout(searchTimeout);
+        const query = e.target.value.trim();
+
+        if (query.length >= 2) {
+            searchTimeout = setTimeout(() => {
+                fetchSearchResults(query);
+            }, 300);
+        } else {
+            suggestionsContainer.classList.remove('active');
+        }
+    });
+
+    // Récupérer les résultats de recherche
+    function fetchSearchResults(query) {
+        fetch(`/api/search?term=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySuggestions(data);
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    // Afficher les suggestions
+    function displaySuggestions(results) {
+        suggestionsContainer.innerHTML = '';
+
+        if (results.length === 0) {
+            suggestionsContainer.classList.remove('active');
+            return;
+        }
+
+        results.forEach(result => {
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            item.innerHTML = `
+                <i class='bx bx-search-alt'></i>
+                <span>${result.title}</span>
+            `;
+
+            item.addEventListener('click', () => {
+                saveToHistory(result);
+                navigateToArticle(result.id);
+            });
+
+            suggestionsContainer.appendChild(item);
+        });
+
+        suggestionsContainer.classList.add('active');
+    }
+
+    // Sauvegarder dans l'historique
+    function saveToHistory(result) {
+        fetch('/history/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                article_id: result.id,
+                title: result.title
+            })
+        });
+    }
+
+    // Naviguer vers l'article
+    function navigateToArticle(articleId) {
+        window.location.href = `/dashboard?highlight=${articleId}`;
+    }
+
+    // Highlight article si nécessaire
+    const urlParams = new URLSearchParams(window.location.search);
+    const highlightId = urlParams.get('highlight');
+    if (highlightId) {
+        const article = document.querySelector(`[data-article-id="${highlightId}"]`);
+        if (article) {
+            article.classList.add('article-highlight');
+            article.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    // Gestionnaire pour la page historique
+    const historyContainer = document.querySelector('.history-list');
+    if (historyContainer) {
+        // Effacer l'historique
+        document.querySelector('.clear-history')?.addEventListener('click', function() {
+            if (confirm('Voulez-vous vraiment effacer tout l\'historique ?')) {
+                fetch('/history/clear', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                }).then(() => {
+                    historyContainer.innerHTML = '<p class="no-history">Aucun historique</p>';
+                });
+            }
+        });
+
+        // Navigation depuis l'historique
+        document.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const articleId = this.dataset.articleId;
+                window.location.href = `/dashboard?highlight=${articleId}`;
+            });
+        });
+    }
+});

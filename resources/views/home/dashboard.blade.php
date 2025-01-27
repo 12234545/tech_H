@@ -289,7 +289,7 @@
         </div>
             <div class="listhhhh">
              @foreach($articles as $article)
-                     <div class="post">
+                     <div class="post"  data-article-id="{{ $article->id }}">
                          <div class="post-header">
                             {{--
                              <div class="post-avatar">
