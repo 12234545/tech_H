@@ -409,3 +409,31 @@ body {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.875rem;
   }
+
+
+
+
+
+
+
+  /******/
+  .clear-history-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.clear-history-btn:hover {
+    background-color: #c82333;
+}
+
+.no-results{
+    color: rgb(211, 207, 207);
+    font-size: 20px;
+    text-align: center;
+    margin-top: 2rem;
+}

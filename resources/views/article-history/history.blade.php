@@ -8,10 +8,10 @@
 <div class="history-container">
     <div class="history-header">
         <h1 class="history-title">Historique de recherche</h1>
-        <button class="clear-history-btn">Effacer l'historique</button>
+        <button class="clear-history-btn" >Effacer l'historique</button>
     </div>
 
-    <div class="search-bar">
+    <div class=" search-bar">
         <i class="search-icon">🔍</i>
         <input type="text" class="search-input" placeholder="Rechercher dans l'historique...">
 
@@ -29,6 +29,9 @@
                     <span class="history-time">
                         <i class='bx bx-time'></i>
                         {{ $history->created_at->diffForHumans() }}
+                    </span>
+                    <span class="history-status">
+                        Statut : {{ $history->status }}
                     </span>
                 </div>
             </div>

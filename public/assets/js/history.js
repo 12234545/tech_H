@@ -65,6 +65,7 @@ window.onload = () => filterHistory('all');
 
 
 //////////////////////////////
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('.find input');
     const suggestionsContainer = document.createElement('div');
@@ -157,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Gestionnaire pour la page historique
+    /*
     const historyContainer = document.querySelector('.history-list');
     if (historyContainer) {
         // Effacer l'historique
@@ -172,6 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+    }
+      */
 
         // Navigation depuis l'historique
         document.querySelectorAll('.history-item').forEach(item => {
@@ -180,5 +184,53 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = `/dashboard?highlight=${articleId}`;
             });
         });
-    }
-});
+
+
+        const historyContainer = document.querySelector('.history-list');
+        if (historyContainer) {
+            // Effacer l'historique
+            document.querySelector('.clear-history-btn')?.addEventListener('click', function() {
+                if (confirm('Voulez-vous vraiment effacer tout l\'historique ?')) {
+                    fetch('/article-history/clear', {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            historyContainer.innerHTML = '<div class="no-results">Aucun historique de recherche</div>';
+                            // Optionnel : Afficher un message de succès
+                            alert('Historique effacé avec succès');
+                        } else {
+                            alert('Erreur lors de la suppression de l\'historique');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Erreur lors de la suppression de l\'historique');
+                    });
+                }
+            });
+        }
+
+
+
+
+
+
+
+
+
+    });
+
+
+   ////********** */
+
+
+
+
+
+

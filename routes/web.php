@@ -100,3 +100,8 @@ Route::post('/article-history/search', [ArticleHistoryController::class, 'search
 Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'showSearchResult'])
     ->name('article.history.show')
     ->middleware('auth');
+
+
+    Route::delete('/article-history/clear', [ArticleHistoryController::class, 'clearAll'])
+    ->name('article.history.clear')
+    ->middleware('auth');
