@@ -7,21 +7,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Notifications\NewRatingPosted;
+use App\Models\ArticleHistory;
 
 class articlecontroller extends Controller
 {
-    /*
-    public function index()
-    {
-        $articles = Article::with(['creator', 'theme'])
-            ->latest()
-            ->paginate(10);
-        $themes = Theme::all();
 
-
-
-        return view('home/dashboard', compact('articles', 'themes'));
-    }*/
 
     public function index(Request $request)
 {
@@ -63,29 +53,15 @@ class articlecontroller extends Controller
             /*'share_link' => route('articles.show', ['article' => '$id']),*/
         ]);
 
+        ArticleHistory::create([
+            'user_id' => auth()->id(),
+            'article_id' => $article->id,
+            'status' => 'publié' // Statut de l'article
+        ]);
+
+
         return redirect()->route('dashboard')->with('success', 'Article publié avec succès!');
     }
-
-
-
-
-
-/*
-   public function showFromNotification(Article $article, DatabaseNotification $notification)
-{
-    $notification->markAsRead();
-
-    $themes = Theme::all();
-
-    return view('home/dashboard', [
-        'articles' => Article::with(['creator', 'theme'])->latest()->paginate(10),
-        'themes' => $themes,
-        'selectedArticle' => $article,
-        'highlightCommentId' => $notification->data['comment_id']
-    ]);
-}
-
-*/
 
 
 public function showFromNotification(Article $article, DatabaseNotification $notification)

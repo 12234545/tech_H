@@ -45,6 +45,7 @@ class ArticleHistoryController extends Controller
     }
 
     // Méthode pour ajouter automatiquement à l'historique
+
     public static function addToHistory($articleId)
     {
         ArticleHistory::create([
@@ -54,7 +55,9 @@ class ArticleHistoryController extends Controller
         ]);
     }
 
+
    //ajouter
+
 
    //////////////////////////
 
@@ -88,4 +91,21 @@ class ArticleHistoryController extends Controller
 
 
 
+    public function clearAll()
+{
+    try {
+        // Supprimer tous les enregistrements d'historique de l'utilisateur connecté
+        ArticleHistory::where('user_id', auth()->id())->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Historique effacé avec succès'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Erreur lors de la suppression de l\'historique'
+        ], 500);
+    }
+}
 }
