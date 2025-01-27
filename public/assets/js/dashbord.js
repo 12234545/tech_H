@@ -479,3 +479,30 @@ function toggleReplyComment(id){
 
 
 
+ document.querySelectorAll('.rating-form').forEach(form => {
+    const stars = form.querySelectorAll('.fa-star');
+
+    stars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+            const value = star.parentElement.dataset.value;
+            highlightStars(stars, value);
+        });
+
+        star.parentElement.addEventListener('mouseout', () => {
+            resetStars(stars);
+        });
+    });
+});
+
+function highlightStars(stars, value) {
+    stars.forEach(star => {
+        const starValue = star.parentElement.dataset.value;
+        star.style.color = starValue <= value ? '#ffd700' : '#ddd';
+    });
+}
+
+function resetStars(stars) {
+    stars.forEach(star => {
+        star.style.color = '#ddd';
+    });
+}

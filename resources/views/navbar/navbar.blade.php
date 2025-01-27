@@ -2,9 +2,15 @@
 <div class="navbar">
     <nav>
          <img src=" {{asset('storage/images/logo1.png')}} " class="logo" >
+         {{--
          <div class="find">
-             <input type="text" placeholder="Search..." ><a href="#"><i class='bx bx-search-alt'></i></a>
+             <input type="text" placeholder="Search..."  style="color: black"><a href="#"><i class='bx bx-search-alt'></i></a>
          </div>
+         --}}
+         <div class="find">
+            <i class='bx bx-search-alt'></i>
+            <input type="text" placeholder="Rechercher..." autocomplete="off" id="search-input2" style="color: black">
+        </div>
          <section class="nav-section">
            <ul>
                <li><a  href="{{ route('app_home') }}" >Home</a></li>
@@ -154,7 +160,7 @@
                          <a href="#"><i class='bx bxs-user' style="font-size: 20px"></i> mon profil</a>
                          <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
                          <a href="{{ route('saved.articles')}}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
-                         <a href="{{ route('app_history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
+                         <a href="{{ route('article.history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
                      </div>
               </div>
            </div>

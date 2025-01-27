@@ -289,7 +289,7 @@
         </div>
             <div class="listhhhh">
              @foreach($articles as $article)
-                     <div class="post">
+                     <div class="post"  data-article-id="{{ $article->id }}">
                          <div class="post-header">
                             {{--
                              <div class="post-avatar">
@@ -312,6 +312,19 @@
                           <p>{{ $article->content }}</p>
 
                           <div class="rating">
+                            <form action="{{ route('articles.rate', $article) }}" method="POST" class="rating-form">
+                                @csrf
+                                <span class="stars">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <button type="submit" name="rating" value="{{ $i }}" class="star-btn">
+                                            <i class="fas fa-star" data-value="{{ $i }}"></i>
+                                        </button>
+                                    @endfor
+                                </span>
+                            </form>
+
+                              {{--
+                                 <div class="rating">
                              <span class="stars">
                                    <i class="fas fa-star" data-value="1"></i>
                                    <i class="fas fa-star" data-value="2"></i>
@@ -319,19 +332,6 @@
                                    <i class="fas fa-star" data-value="4"></i>
                                    <i class="fas fa-star" data-value="5"></i>
                               </span>
-
-                              {{--
-                              <div class="rating">
-                                <form action="{{ route('articles.rate', $article) }}" method="POST" class="rating-form">
-                                    @csrf
-                                    <span class="stars">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <button type="submit" name="rating" value="{{ $i }}" class="star-btn">
-                                                <i class="fas fa-star" data-value="{{ $i }}"></i>
-                                            </button>
-                                        @endfor
-                                    </span>
-                                </form>
                                 --}}
                               <br>
                               <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Commentaires<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
