@@ -78,4 +78,9 @@ Route::get('showFromNotification/{article}/{notification}', [ArticleController::
 
 
 
-    Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');
+Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');
+
+
+
+
+

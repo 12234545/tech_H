@@ -71,15 +71,7 @@ class articlecontroller extends Controller
 
 
 /*
-    public function showFromNotification(Article $article, DatabaseNotification $notification)
-    {
-        $notification->markAsRead();
-
-        return view('home/dashboard', compact('article'));
-
-    }
-*/
-public function showFromNotification(Article $article, DatabaseNotification $notification)
+   public function showFromNotification(Article $article, DatabaseNotification $notification)
 {
     $notification->markAsRead();
 
@@ -92,17 +84,68 @@ public function showFromNotification(Article $article, DatabaseNotification $not
         'highlightCommentId' => $notification->data['comment_id']
     ]);
 }
+*/
+
+public function showFromNotification(Article $article, DatabaseNotification $notification)
+{
+    $notification->markAsRead();
+    $themes = Theme::all();
+
+    // Préparation des données de base
+    $viewData = [
+        'articles' => Article::with(['creator', 'theme'])->latest()->paginate(10),
+        'themes' => $themes,
+        'selectedArticle' => $article,
+    ];
+
+    // Ajout du highlightCommentId seulement s'il s'agit d'une notification de commentaire
+    if (isset($notification->data['notification_type']) &&
+        ($notification->data['notification_type'] === 'comment' ||
+         $notification->data['notification_type'] === 'reply') &&
+        isset($notification->data['comment_id'])) {
+        $viewData['highlightCommentId'] = $notification->data['comment_id'];
+    }
+    else{
+        return view('home/dashboard', [
+            'articles' => Article::with(['creator', 'theme'])->latest()->paginate(10),
+            'themes' => $themes,
+            'selectedArticle' => $article,
+
+        ]);
+    }
+    return view('home/dashboard', $viewData);
+}
+
+
+
 
 public function rate(Request $request, Article $article)
 {
-    $rating = $request->input('rating');
-
-    $article->ratings()->create([
-        'user_id' => auth()->id(),
-        'rating' => $rating
+    // Valider la notation
+    $validated = $request->validate([
+        'rating' => 'required|integer|min:1|max:5'
     ]);
 
-    $article->creator->notify(new NewRatingPosted($article, auth()->user(), $rating));
+    // Vérifier si l'utilisateur a déjà noté cet article
+    $existingRating = $article->ratings()
+        ->where('user_id', auth()->id())
+        ->first();
+
+    if ($existingRating) {
+        // Mettre à jour la note existante
+        $existingRating->update([
+            'rating' => $validated['rating']
+        ]);
+    } else {
+        // Créer une nouvelle note
+        $article->ratings()->create([
+            'user_id' => auth()->id(),
+            'rating' => $validated['rating']
+        ]);
+
+        // Envoyer une notification au créateur de l'article
+        $article->creator->notify(new NewRatingPosted($article, auth()->user(), $validated['rating']));
+    }
 
     return redirect()->back()->with('success', 'Note enregistrée avec succès');
 }

@@ -40,4 +40,15 @@ class article extends Model
 }
 
     use HasFactory;
+
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function hasUserRated($userId)
+    {
+        return $this->ratings()->where('user_id', $userId)->exists();
+    }
 }
