@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Theme;
+USE App\Models\Theme;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
+
     public function subscribe(Theme $theme)
     {
         $user = Auth::user();
@@ -19,12 +20,14 @@ class ThemeController extends Controller
             // Désabonner l'utilisateur
             $user->subscribedThemes()->detach($theme->id);
             $theme->decrement('subscribers_count');
-            return response()->json(['success' => true, 'subscribed' => false]);
+            return redirect()->back()->with('success', 'Désabonnement réussi !');
         } else {
             // Abonner l'utilisateur
             $user->subscribedThemes()->attach($theme->id);
             $theme->increment('subscribers_count');
-            return response()->json(['success' => true, 'subscribed' => true]);
+            return redirect()->back()->with('success', 'Abonnement réussi !');
         }
     }
+
+
 }

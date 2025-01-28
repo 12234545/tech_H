@@ -247,9 +247,17 @@
                         <span class="icon"><ion-icon name="{{ $theme->icon }}"></ion-icon></span>
                         <span class="title">{{ $theme->name }}</span>
                     </a>
+                    {{--
                     <button class="subscribe-btn {{ Auth::user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}" data-theme-id="{{ $theme->id }}">
                         {{ Auth::user()->subscribedThemes->contains($theme->id) ? '✓' : '+' }}
                     </button>
+                    --}}
+                    <form method="POST" action="{{ route('themes.subscribe', $theme->id) }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="subscribe-btn {{ Auth::user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}">
+                            {{ Auth::user()->subscribedThemes->contains($theme->id) ? '✓' : '+' }}
+                        </button>
+                    </form>
                 </li>
                 @endforeach
 

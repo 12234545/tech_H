@@ -109,4 +109,4 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
 
 
 
- Route::post('/themes/{theme}/subscribe', [ThemeController::class, 'subscribe'])->name('themes.subscribe');
+    Route::post('/themes/{theme}/subscribe', [ThemeController::class, 'subscribe'])->name('themes.subscribe');
