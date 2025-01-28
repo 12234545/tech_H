@@ -5,68 +5,68 @@
 @section('content')
 <div class="container15">
 
-  <h1>🚀 Nos Services Tech Horizons</h1>
+  <h1>🚀 Our Services Tech Horizons</h1>
   <div class="services">
-    <h3>Innovation & Découverte</h3>
+    <h3>Innovation & Discovery</h3>
     <br>
     <p>
-        Explorez les dernières tendances technologiques
-        Articles exclusifs par des experts
-        Décryptage des innovations émergentes
+        Explore the latest technology trends
+        Exclusive articles by experts
+        Decoding emerging innovations
     </p>
   </div>
   <div class="services">
-    <h3>Personnalisation Intelligente</h3>
+    <h3>Intelligent Personalization</h3>
     <br>
     <p>
-        Recommandations d'articles sur mesure
-        Suivi personnalisé de votre historique
-        Abonnements thématiques adaptés
-    </p>
-  </div>
-
-  <div class="services">
-    <h3>Communauté Technologique</h3>
-    <br>
-    <p>
-        Interactions avec des passionnés
-        Forums de discussion
-        Partage d'insights professionnels
+        Tailored Article Recommendations
+        Personalized Tracking of Your History
+        Customized Thematic Subscriptions
     </p>
   </div>
 
   <div class="services">
-    <h3>Services Éditoriaux</h3>
+    <h3>Community Technologie</h3>
     <br>
     <p>
-        Soumission d'articles par la communauté
-        Processus de validation transparent
-        Accompagnement des contributeurs
+        Engagement with Enthusiasts
+        Discussion Forums
+        Sharing Professional Insights
     </p>
   </div>
 
   <div class="services">
-    <h3>Engagement Technologique</h3>
+    <h3>Editorial Services</h3>
     <br>
     <p>
-        Notation et feedback d'articles
-        Système de modération communautaire
-        Mise en valeur des contributions
+        Community Article Submissions
+        Transparent Validation Process
+        Support for Contributors
     </p>
   </div>
 
   <div class="services">
-    <h3>Points Forts</h3>
+    <h3>Technological Engagement</h3>
     <br>
     <p>
-        Interface intuitive
-        Sécurité des données
-        Expertise technologique
-        Vision éthique de l'innovation
+        Article Rating and Feedback
+        Community Moderation System
+        Highlighting Contributions
     </p>
   </div>
 
-<h1>💡 Rejoignez l'Aventure Tech Horizons !</h1>
+  <div class="services">
+    <h3>Key Strengths</h3>
+    <br>
+    <p>
+        Intuitive Interface
+        Data Security
+        Technological Expertise
+        Ethical Vision of Innovation
+    </p>
+  </div>
+
+<h1>💡 Join the Tech Horizons Journey !</h1>
 </div>
 
 @endsection

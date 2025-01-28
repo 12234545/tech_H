@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Naviguer vers l'article
+
     function navigateToArticle(articleId) {
         window.location.href = `/dashboard?highlight=${articleId}`;
     }
@@ -178,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
       */
 
         // Navigation depuis l'historique
+
         document.querySelectorAll('.history-item').forEach(item => {
             item.addEventListener('click', function() {
                 const articleId = this.dataset.articleId;
@@ -190,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (historyContainer) {
             // Effacer l'historique
             document.querySelector('.clear-history-btn')?.addEventListener('click', function() {
-                if (confirm('Voulez-vous vraiment effacer tout l\'historique ?')) {
+                //if (confirm('Voulez-vous vraiment effacer tout l\'historique ?')) {
                     fetch('/article-history/clear', {
                         method: 'DELETE',
                         headers: {
@@ -203,16 +205,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (data.success) {
                             historyContainer.innerHTML = '<div class="no-results">Aucun historique de recherche</div>';
                             // Optionnel : Afficher un message de succès
-                            alert('Historique effacé avec succès');
+                            showNotification('L\'historique a été effacé', 'success');
                         } else {
-                            alert('Erreur lors de la suppression de l\'historique');
+                            // Optionnel : Afficher un message d'erreur
+                            showNotification('Erreur lors de la suppression de l\'historique', 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Erreur:', error);
-                        alert('Erreur lors de la suppression de l\'historique');
+                        // Optionnel : Afficher un message d'erreur
+                        showNotification('Une erreur s\'est produite lors de la suppression de l\'historique', 'error');
                     });
-                }
+                //}
             });
         }
 

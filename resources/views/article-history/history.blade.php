@@ -7,17 +7,13 @@
 {{----}}
 <div class="history-container">
     <div class="history-header">
-        <h1 class="history-title">Historique de recherche</h1>
-        <button class="clear-history-btn" >Effacer l'historique</button>
+        <h1 class="history-title" >History</h1>
+        <button class="clear-history-btn" >Clear History</button>
     </div>
 
     <div class=" search-bar">
         <i class="search-icon">🔍</i>
-        <input type="text" class="search-input" placeholder="Rechercher dans l'historique...">
-
-        <div class="search-results">
-            <!-- Les résultats de recherche dynamiques apparaîtront ici -->
-        </div>
+        <input type="text" class="search-input" placeholder="Search...">
     </div>
 
     <div class="history-list">
@@ -36,7 +32,7 @@
                 </div>
             </div>
         @empty
-            <div class="no-results">Aucun historique de recherche</div>
+            <div class="no-results">No search history</div>
         @endforelse
     </div>
 </div>

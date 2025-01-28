@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 searchResults.innerHTML = '';
 
                 if (data.length > 0) {
+
                     data.forEach(article => {
                         const link = document.createElement('a');
                         link.href = `/article-history/show/${article.id}`;
@@ -216,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         searchResults.appendChild(link);
                     });
+
+
                     searchResults.style.display = 'block';
                 } else {
                     searchResults.style.display = 'none';
