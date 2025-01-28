@@ -18,11 +18,6 @@
         <i class='bx bxs-lock-alt'></i>
       </div>
 
-      <div class="remember-forgot">
-        <a href="#">Forgot password?</a>
-      </div>
-
-
       <button type="submit" class="btn">Login</button>
 
       <div class="register-link">

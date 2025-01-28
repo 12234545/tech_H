@@ -7,6 +7,7 @@
 
          <meta name="csrf-token" content="{{ csrf_token() }}">
         <title> {{config('app.name')}}-@yield('title')</title>
+        <link href="{{asset('storage/images/logoicon2.png')}}" type="image/x-icon" rel="icon" style="scale: 6">
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">

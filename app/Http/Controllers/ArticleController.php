@@ -12,6 +12,7 @@ use App\Models\ArticleHistory;
 class articlecontroller extends Controller
 {
 
+    /*
 
     public function index(Request $request)
 {
@@ -23,6 +24,33 @@ class articlecontroller extends Controller
     }
 
     // If Nouveautés is selected, show articles from the last 7 days
+    if ($request->has('nouveautes')) {
+        $query->where('created_at', '>=', now()->subDays(7));
+    }
+
+    $articles = $query->paginate(10);
+    $themes = Theme::all();
+
+    return view('home/dashboard', compact('articles', 'themes'));
+}
+    */
+    public function index(Request $request)
+{
+    $user = auth()->user();
+    $query = Article::with(['creator', 'theme'])->latest();
+
+    // Si l'utilisateur est connecté et veut voir uniquement les articles des thèmes abonnés
+    if ($request->has('abonnes') && $user) {
+        $subscribedThemeIds = $user->subscribedThemes()->pluck('themes.id')->toArray();
+        $query->whereIn('theme_id', $subscribedThemeIds);
+    }
+
+    // Si un thème est sélectionné, filtrer les articles par ce thème
+    if ($request->has('theme_id')) {
+        $query->where('theme_id', $request->theme_id);
+    }
+
+    // Si "Nouveautés" est sélectionné, afficher les articles des 7 derniers jours
     if ($request->has('nouveautes')) {
         $query->where('created_at', '>=', now()->subDays(7));
     }

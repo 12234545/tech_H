@@ -1,50 +1,4 @@
-{{--
-@extends('welcome')
 
-@section('title', 'Save')
-
-@section('content')
-
-
-
-  <div class="container12">
-       <h1 >My Saved Articles</h1>
-
-       <div class="saved-posts">
-          @forelse ($savedArticles as $savedArticle)
-             <div class="post">
-                  <div class="post-header">
-                      <div class="post-meta">
-                           <strong>{{ $savedArticle->article->creator->name }}</strong>
-                           <div>Sauvegardé le {{ $savedArticle->created_at->format('d/m/Y') }}</div>
-                      </div>
-                  </div>
-                    @if($savedArticle->article->image)
-                        <div>
-                           <img src="{{ $savedArticle->article->image }}"  id="imageARTICLE" alt="Article Image">
-                        </div>
-                   @endif
-                   <h3>{{ $savedArticle->article->title }}</h3>
-                    <p id="contentARTICLE">{{ $savedArticle->article->content }}</p>
-
-                    <div class="post-options">
-                      <form action="{{ route('articles.unsave', $savedArticle->article->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="unsave-button">
-                            <i class="fas fa-bookmark"></i> Retirer des sauvegardes
-                        </button>
-                      </form>
-                 </div>
-            </div>
-            @empty
-            <p id="Message">Vous n'avez pas encore d'articles sauvegardés.</p>
-         @endforelse
-    </div>
-
-
-@endsection
---}}
 @extends('welcome')
 
 @section('title', 'Save')
@@ -60,20 +14,20 @@
             </div>
             <div class="article-details">
                 <h3>{{ $savedArticle->article->title }}</h3>
-                <p class="saved-date">Sauvegardé le {{ $savedArticle->created_at->format('d/m/Y') }}</p>
+                <p class="saved-date">Saved on  {{ $savedArticle->created_at->format('d/m/Y') }}</p>
                 <p class="article-excerpt">{{ Str::limit($savedArticle->article->content, 100) }}</p>
-                <button class="read-more" data-article-id="{{ $savedArticle->article->id }}">Lire plus</button>
+                <button class="read-more" data-article-id="{{ $savedArticle->article->id }}">Read more</button>
                 <form action="{{ route('articles.unsave', $savedArticle->article->id) }}" method="POST" class="unsave-form">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="unsave-button">
-                        <i class='bx bxs-bookmark-minus'></i> Retirer des sauvegardes
+                        <i class='bx bxs-bookmark-minus'></i> Remove from saved
                     </button>
                 </form>
             </div>
         </div>
         @empty
-        <p id="Message">Vous n'avez pas encore d'articles sauvegardés.</p>
+        <p id="Message">You have no saved articles .</p>
         @endforelse
     </div>
 </div>

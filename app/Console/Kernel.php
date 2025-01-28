@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\SendArticleRecommendations;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,9 +15,10 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+{
+    // Exécution deux fois par jour à 10h et 16h
+    $schedule->command('recommendations:generate')->everyMinute();
+}
 
     /**
      * Register the commands for the application.
