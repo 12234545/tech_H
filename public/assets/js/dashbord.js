@@ -506,3 +506,40 @@ function resetStars(stars) {
         star.style.color = '#ddd';
     });
 }
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.subscribe-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const themeId = this.getAttribute('data-theme-id');
+            const isSubscribed = this.classList.contains('subscribed');
+
+            fetch(`/themes/${themeId}/subscribe`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.subscribed) {
+                        this.classList.add('subscribed');
+                        this.textContent = '✓';
+                    } else {
+                        this.classList.remove('subscribed');
+                        this.textContent = '+';
+                    }
+                } else {
+                    alert('Erreur lors de l\'abonnement.');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+});
