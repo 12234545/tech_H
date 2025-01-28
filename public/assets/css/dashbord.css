@@ -49,6 +49,7 @@
     border-radius: 20px;
     overflow: hidden;
 
+
   }
   .navigation.active {
     width: 80px;
@@ -68,6 +69,7 @@
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     display: flex;
+
   }
 
   .navigation ul li:hover,
@@ -87,6 +89,7 @@
     display: flex;
     text-decoration: none;
     color: var(--white);
+
   }
   .navigation ul li:hover a,
   .navigation ul li.hovered a {
@@ -806,7 +809,7 @@
     color: #ffd700;
 }
 
-/******/
+/******
 .navigation .subscribe-btn {
     background: transparent;
     color: white;
@@ -818,4 +821,22 @@
     font-size: 16px;
 }
 
+****/
+.subscribe-btn {
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
 
+.subscribe-btn.subscribed {
+    color: #4CAF50;
+}
+
+.subscribe-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
