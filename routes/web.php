@@ -32,10 +32,9 @@ Route::get('/about', [HomeController::class,'about'])
 Route::get('/ourService', [HomeController::class,'ourService'])
        ->name('app_ourService');
 
- //Route::get('/history', [HomeController::class,'history'])
-       //->name('app_history')
-       //->middleware('auth');
 
+Route::get('/choix', [HomeController::class,'choix'])
+       ->name('app_choix');
 
 
 Route::match(['get','post'],'/dashboard',[HomeController::class,'dashboard'])

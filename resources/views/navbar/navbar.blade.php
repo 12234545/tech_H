@@ -46,7 +46,7 @@
        </section>
        <div>
           @guest
-          <a href="{{ route('login')}}" class="login-btn">Login</a>
+          <a href="{{ route('app_choix')}}" class="login-btn">Login</a>
           <a href="{{ route('register')}}" class="btn">Sing Up</a>
           @endguest
 
