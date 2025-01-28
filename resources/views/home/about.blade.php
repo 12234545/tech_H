@@ -16,7 +16,7 @@
 <h1>Our Mission</h1>
 <section class="aboutkkk">
     <div class="right">
-<p>Our mission is to provide an interactive space where enthusiasts, professionals, and the curious can explore technological innovations, subscribe to their favorite topics, and even contribute by proposing articles. We are committed to delivering a seamless user experience while ensuring the security and reliability of the features offered by <strong>Tech Horizons</strong>.</p>
+<p>Our mission is to provide an interactive Magazine space where enthusiasts, professionals, and the curious can explore technological innovations, subscribe to their favorite topics, and even contribute by proposing articles. We are committed to delivering a seamless user experience while ensuring the security and reliability of the features offered by <strong>Tech Horizons</strong>.</p>
 </div>
 </section>
 
