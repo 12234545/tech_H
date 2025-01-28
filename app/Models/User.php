@@ -50,7 +50,10 @@ class User extends Authenticatable
     ];
 
 
-
+    public function subscribedThemes()
+    {
+        return $this->belongsToMany(Theme::class, 'theme_user')->withTimestamps();
+    }
 
 
 }

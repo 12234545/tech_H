@@ -19,5 +19,11 @@ class theme extends Model
     {
         return $this->hasMany(Article::class);
     }
+
+
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class, 'theme_user')->withTimestamps();
+    }
     use HasFactory;
 }

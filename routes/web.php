@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SavedArticleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ArticleHistoryController;
+use App\Http\Controllers\ThemeController;
 
 
 /*
@@ -105,3 +106,7 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
     Route::delete('/article-history/clear', [ArticleHistoryController::class, 'clearAll'])
     ->name('article.history.clear')
     ->middleware('auth');
+
+
+
+ Route::post('/themes/{theme}/subscribe', [ThemeController::class, 'subscribe'])->name('themes.subscribe');

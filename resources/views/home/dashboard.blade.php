@@ -247,6 +247,9 @@
                         <span class="icon"><ion-icon name="{{ $theme->icon }}"></ion-icon></span>
                         <span class="title">{{ $theme->name }}</span>
                     </a>
+                    <button class="subscribe-btn {{ Auth::user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}" data-theme-id="{{ $theme->id }}">
+                        {{ Auth::user()->subscribedThemes->contains($theme->id) ? '✓' : '+' }}
+                    </button>
                 </li>
                 @endforeach
 
@@ -479,6 +482,36 @@
     }
 </style>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.subscribe-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const themeId = this.getAttribute('data-theme-id');
+
+                fetch(`/themes/${themeId}/subscribe`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Abonnement réussi !');
+                        // Vous pouvez également mettre à jour l'interface utilisateur ici si nécessaire
+                    } else {
+                        alert('Erreur lors de l\'abonnement.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+    });
+</script>
 
 
 @endsection
