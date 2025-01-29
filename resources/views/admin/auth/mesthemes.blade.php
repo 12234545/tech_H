@@ -76,6 +76,7 @@
 <style>
 .themes-list {
     padding: 20px;
+    flex-direction: row-gap: 20px;
 }
 
 .themes-grid {

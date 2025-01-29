@@ -30,7 +30,22 @@ class ThemeController extends Controller
         }
     }
 
+    public function adminSubscribe(Theme $theme)
+    {
+        $admin = Auth::guard('admin')->user();
 
+        if ($admin->subscribedThemes()->where('theme_id', $theme->id)->exists()) {
+            // Désabonner l'administrateur
+            $admin->subscribedThemes()->detach($theme->id);
+            $theme->decrement('subscribers_count');
+            return redirect()->back()->with('success', 'Désabonnement réussi !');
+        } else {
+            // Abonner l'administrateur
+            $admin->subscribedThemes()->attach($theme->id);
+            $theme->increment('subscribers_count');
+            return redirect()->back()->with('success', 'Abonnement réussi !');
+        }
+    }
 
     public function store(Request $request)
     {

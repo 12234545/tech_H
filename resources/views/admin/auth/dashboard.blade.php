@@ -28,7 +28,14 @@
                         <span class="icon"><ion-icon name="{{ $theme->icon }}"></ion-icon></span>
                         <span class="title">{{ $theme->name }}</span>
                     </a>
-
+                    @if($theme->responsible !== Auth::guard('admin')->user()->firstname . ' ' . Auth::guard('admin')->user()->lastname)
+        <form method="POST" action="{{ route('admin.themes.subscribe', $theme->id) }}" style="display: inline;">
+            @csrf
+            <button type="submit" class="subscribe-btn {{ Auth::guard('admin')->user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}" onclick="return showNotification('Action réussie')">
+                {{ Auth::guard('admin')->user()->subscribedThemes->contains($theme->id) ? '✓' : '+' }}
+            </button>
+        </form>
+          @endif
                 </li>
                 @endforeach
 
@@ -267,4 +274,35 @@
 
     document.querySelector('.admin-float-button').addEventListener('click', openThemeModal);
 </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.subscribe-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const themeId = this.getAttribute('data-theme-id');
+
+            fetch(`/admin/themes/${themeId}/admin-subscribe`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Action réussie !');
+                    // Mettre à jour l'interface utilisateur
+                    this.classList.toggle('subscribed');
+                    this.textContent = this.classList.contains('subscribed') ? '✓' : '+';
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    });
+});
+
+
+    </script>
 @endsection

@@ -28,6 +28,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
      Route::delete('/comments/{comment}', [AdminCommentController::class, 'destroy'])->name('admin.comments.destroy');
      Route::get('/home', [HomeController::class, 'home'])->name('admin.home');
      Route::get('/about', [HomeController::class, 'about'])->name('admin.about');
+     Route::post('/themes/{theme}/admin-subscribe', [ThemeController::class, 'adminSubscribe'])
+    ->name('admin.themes.subscribe');
 });
 
 

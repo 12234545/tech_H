@@ -33,9 +33,11 @@ class Theme extends Model
     return $this->articles()->count();
 }
 
-public function getSubscribersCountAttribute()
+
+
+public function adminSubscribers()
 {
-    return $this->subscribers_count ?? 0;
+    return $this->belongsToMany(Admin::class, 'admin_theme')->withTimestamps();
 }
     use HasFactory;
 }
