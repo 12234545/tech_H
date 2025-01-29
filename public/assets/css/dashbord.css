@@ -42,7 +42,7 @@
     left: -20px;
     padding: 20px;
     width: 25%;
-    height: calc(130vh - 10px);
+    height: auto;
     background: var(--blue);
     border-left: 10px solid var(--blue);
     transition: 0.5s;

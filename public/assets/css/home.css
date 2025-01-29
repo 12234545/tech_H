@@ -64,7 +64,7 @@
  .navbar  ul li a{
       text-decoration: none;
       color: #fff;
-      font-size: 18px;
+      font-size: 13px;
       padding: 1rem 2rem;
       position: relative;
 
@@ -731,7 +731,7 @@ ul{
 }
 
 .profile-img {
-    margin-right: 30px;
+    margin-right: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;

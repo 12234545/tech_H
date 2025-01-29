@@ -14,6 +14,8 @@ class logincontroller extends Controller
     public function login(){
         return view('auth/login');
     }
+
+
     public function singUp(){
         return view('auth/singUp');
     }

@@ -2,21 +2,34 @@
 <div class="navbar">
     <nav>
          <img src=" {{asset('storage/images/logo1.png')}} " class="logo" >
-         {{--
-         <div class="find">
-             <input type="text" placeholder="Search..."  style="color: black"><a href="#"><i class='bx bx-search-alt'></i></a>
-         </div>
-         --}}
          <div class="find">
             <i class='bx bx-search-alt'></i>
             <input type="text" placeholder="Rechercher..." autocomplete="off" id="search-input2" style="color: black">
         </div>
          <section class="nav-section">
            <ul>
-               <li><a  href="{{ route('app_home') }}" >Home</a></li>
-               <li><a  href="{{ route('app_about') }}" >About Us</a></li>
+            <li>
+                @if(Auth::guard('admin')->check())
+                    <a href="{{ route('admin.home') }}">Home</a>
+                @else
+                    <a href="{{ route('app_home') }}">Home</a>
+                @endif
+            </li>
+
+            <li>
+                @if(Auth::guard('admin')->check())
+                    <a href="{{ route('admin.about') }}">About Us</a>
+                @else
+                    <a href="{{ route('app_about') }}">About Us</a>
+                @endif
+            </li>
                @auth
-               <li><a  href="{{ route('dashboard') }}" >Community</a></li>
+               @if(Auth::guard('admin')->check())
+                   <li><a href="{{ route('admin.dashboard') }}" >Community</a></li>
+                   <li><a href="{{ route('admin.mesthemes') }}" >Mythemes</a></li>
+               @elseif(Auth::guard('web')->check())
+                   <li><a href="{{ route('dashboard') }}" >Community</a></li>
+               @endif
                @endauth
                @guest
                <li><a href="#" >Themes</a>
@@ -46,8 +59,8 @@
        </section>
        <div>
           @guest
-          <a href="{{ route('login')}}" class="login-btn">Login</a>
-          <a href="{{ route('register')}}" class="btn">Sing Up</a>
+          <a href="{{ route('app_choix')}}" class="login-btn">Login</a>
+          <a href="{{ route('app_choixSingUp')}}" class="btn">Sing Up</a>
           @endguest
 
 
@@ -110,14 +123,25 @@
 
 
 
-                <p style="color: white; font-size: 20px; padding: 10px">{{ Auth::user()->name }}</p>
+
+                @if (Auth::guard('admin')->check())
+                   <p style="color: white; font-size: 15px; padding: 10px">
+                {{ Auth::guard('admin')->user()->firstname }} {{ Auth::guard('admin')->user()->lastname }}</p>
+
+              @else
+                   <p style="color: white; font-size: 15px; padding: 10px">{{ Auth::user()->name }}</p>
+              @endif
                 <div class="profile-dropdown" >
                      <div class="profile-img">
                         <i class='bx bxs-user-circle' style="color: rgb(242, 237, 237) ; font-size: 60px"></i>
                      </div>
                      <div class="dropdown-content">
                          <a href="#"><i class='bx bxs-user' style="font-size: 20px"></i> My profil</a>
-                         <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log out</a>
+                         @if(Auth::guard('admin')->check())
+                         <a href="{{ route('admin.logout')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
+                         @else
+                         <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
+                         @endif
                          <a href="{{ route('saved.articles')}}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
                          <a href="{{ route('article.history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
                      </div>
