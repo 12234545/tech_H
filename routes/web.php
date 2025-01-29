@@ -116,6 +116,9 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
     require __DIR__.'/adminauth.php';
 
 
+
+
+
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
 
 
@@ -128,3 +131,4 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
 
 // Modifier un article
 Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
+

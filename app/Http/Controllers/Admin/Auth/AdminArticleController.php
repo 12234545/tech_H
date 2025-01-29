@@ -51,13 +51,25 @@ class AdminArticleController extends Controller
     }
 
     public function destroy(Article $article)
-    {
-        if ($article->image) {
-            Storage::delete(str_replace('/storage/', 'public/', $article->image));
-        }
+{
+    $admin = auth()->guard('admin')->user();
+    $adminFullName = $admin->firstname . ' ' . $admin->lastname;
 
-        $article->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Article supprimé avec succès!');
+    if ($article->theme->responsible !== $adminFullName) {
+        return redirect()->back()->with('error', 'Vous n\'avez pas la permission de supprimer cet article.');
     }
+
+    if ($article->image) {
+        Storage::delete(str_replace('/storage/', 'public/', $article->image));
+    }
+
+    $article->delete();
+
+    return redirect()->back()->with('success', 'Article supprimé avec succès!');
 }
+
+
+}
+
+

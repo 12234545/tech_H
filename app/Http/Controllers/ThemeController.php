@@ -6,12 +6,17 @@ USE App\Models\Theme;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Article;
+use App\Models\Admin;
+use App\Notifications\ThemeSubscriptionNotification;
+use Illuminate\Support\Facades\DB;
+
 
 
 use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
+
 
     public function subscribe(Theme $theme)
     {
@@ -26,6 +31,8 @@ class ThemeController extends Controller
             // Abonner l'utilisateur
             $user->subscribedThemes()->attach($theme->id);
             $theme->increment('subscribers_count');
+            //ajouter
+
             return redirect()->back()->with('success', 'Abonnement réussi !');
         }
     }
@@ -63,33 +70,118 @@ class ThemeController extends Controller
 
         return redirect()->back()->with('success', 'Thème ajouté avec succès');
     }
+
+
     public function myThemes()
 {
-    $admin = Auth::guard('admin')->user();
-    $themes = Theme::where('responsible', $admin->firstname . ' ' . $admin->lastname)
-        ->get();
+    $admin = auth()->guard('admin')->user();
+    $fullName = $admin->firstname . ' ' . $admin->lastname;
+
+    $themes = Theme::where('responsible', $fullName)
+        ->withCount(['articles', 'subscribers', 'adminSubscribers'])
+        ->get()
+        ->map(function ($theme) {
+            // Calculer le nombre total d'abonnés (utilisateurs + admins)
+            $theme->subscribers_count = $theme->subscribers_count + $theme->admin_subscribers_count;
+            return $theme;
+        });
 
     return view('admin.auth.mesthemes', compact('themes'));
 }
+
 public function showThemeArticles($id)
-{
-    $admin = Auth::guard('admin')->user();
-    $adminFullName = $admin->firstname . ' ' . $admin->lastname;
+    {
+        $admin = Auth::guard('admin')->user();
+        $adminFullName = $admin->firstname . ' ' . $admin->lastname;
 
-    $theme = Theme::findOrFail($id);
+        $theme = Theme::findOrFail($id);
 
-    // Vérifie si le thème appartient à l'admin connecté
-    if ($theme->responsible !== $adminFullName) {
-        return redirect()->back()->with('error', 'Vous n\'avez pas accès à ce thème');
+        // Vérifie si le thème appartient à l'admin connecté
+        if ($theme->responsible !== $adminFullName) {
+            return redirect()->back()->with('error', 'Vous n\'avez pas accès à ce thème');
+        }
+
+        $articles = Article::where('theme_id', $id)
+            ->with(['creator', 'comments'])
+            ->latest()
+            ->paginate(10);
+
+        // Récupérer les abonnés du thème avec leur info
+        $subscribers = $theme->subscribers()
+            ->select('users.id', 'users.name', 'users.profile_photo')
+            ->get();
+
+        $adminSubscribers = $theme->adminSubscribers()
+            ->select('admins.id', 'admins.firstname', 'admins.lastname', 'admins.profile_photo')
+            ->get();
+
+        // Combiner les abonnés utilisateurs et administrateurs
+        $allSubscribers = collect();
+
+        foreach ($subscribers as $subscriber) {
+            $allSubscribers->push([
+                'id' => $subscriber->id,
+                'name' => $subscriber->name,
+                'profile_photo' => $subscriber->profile_photo,
+                'type' => 'user'
+            ]);
+        }
+
+        foreach ($adminSubscribers as $subscriber) {
+            $allSubscribers->push([
+                'id' => $subscriber->id,
+                'name' => $subscriber->firstname . ' ' . $subscriber->lastname,
+                'profile_photo' => $subscriber->profile_photo,
+                'type' => 'admin'
+            ]);
+        }
+
+        $themes = Theme::where('responsible', $adminFullName)->get();
+
+        return view('admin.auth.theme-articles', compact('articles', 'themes', 'theme', 'allSubscribers'));
     }
 
-    $articles = Article::where('theme_id', $id)
-        ->with(['creator', 'comments'])
-        ->latest()
-        ->paginate(10);
 
-    $themes = Theme::where('responsible', $adminFullName)->get();
 
-    return view('admin.auth.theme-articles', compact('articles', 'themes', 'theme'));
+            public function removeSubscriber(Theme $theme, $subscriberType, $subscriberId)
+            {
+                try {
+                    // Vérifier les permissions
+                    $admin = auth()->guard('admin')->user();
+                    $adminFullName = $admin->firstname . ' ' . $admin->lastname;
+
+                    if ($theme->responsible !== $adminFullName) {
+                        return back()->with('error', 'Permission refusée.');
+                    }
+
+                    if ($subscriberType === 'admin') {
+                        // Trouver l'admin
+                        $subscriber = Admin::find($subscriberId);
+                        if ($subscriber) {
+                            // Supprimer manuellement de la table pivot
+                            DB::statement('DELETE FROM admin_theme WHERE admin_id = ? AND theme_id = ?', [$subscriberId, $theme->id]);
+                            // Forcer la mise à jour des relations
+                            $theme->load('adminSubscribers');
+                        }
+                    } else {
+                        // Trouver l'utilisateur
+                        $subscriber = User::find($subscriberId);
+                        if ($subscriber) {
+                            // Supprimer manuellement de la table pivot
+                            DB::statement('DELETE FROM theme_user WHERE user_id = ? AND theme_id = ?', [$subscriberId, $theme->id]);
+                            // Forcer la mise à jour des relations
+                            $theme->load('subscribers');
+                        }
+                    }
+
+                    // Vider le cache des relations
+                    $theme->unsetRelations();
+
+                    return back()->with('success', 'Abonné supprimé avec succès.');
+                } catch (\Exception $e) {
+
+                    return back()->with('error', 'Erreur lors de la suppression.');
+                }
+            }
 }
-}
+

@@ -94,6 +94,7 @@
         <div class="modern-notification-content">
             <div class="modern-notification-text">
                 <a href="{{ route('Article.showFromNotification',['article'=>$notification->data['article_id'] , 'notification'=>$notification->id]) }}">
+                    {{--
                     @if(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'comment')
                         <p>{{ $notification->data['user_name'] }} posted a comment on your article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
                     @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'reply')
@@ -102,6 +103,30 @@
                         <p>{{ $notification->data['user_name'] }} rated your article <strong>{{ $notification->data['titreArticle'] }}</strong> {{ $notification->data['rating'] }} étoiles</p>
                     @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'recommendation')
                         <p>Recommended article for you  : <strong>{{ $notification->data['titreArticle'] }}</strong></p>
+                    @else
+                        <p>New notification</p>
+                    @endif
+                   --}}
+                   @if(isset($notification->data['notification_type']))
+                        @switch($notification->data['notification_type'])
+                            @case('comment')
+                                <p>{{ $notification->data['user_name'] }} posted a comment on your article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
+                                @break
+                            @case('reply')
+                                <p>{{ $notification->data['user_name'] }} replied to your comment on the article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
+                                @break
+                            @case('rating')
+                                <p>{{ $notification->data['user_name'] }} rated your article <strong>{{ $notification->data['titreArticle'] }}</strong> {{ $notification->data['rating'] }} étoiles</p>
+                                @break
+                            @case('theme_subscription')
+                                <p>{{ $notification->data['user_name'] }} s'est abonné à votre thème <strong>{{ $notification->data['theme_name'] }}</strong></p>
+                                @break
+                            @case('new_theme_article')
+                                <p>{{ $notification->data['user_name'] }} a publié un article dans votre thème <strong>{{ $notification->data['theme_name'] }}</strong> : {{ $notification->data['article_title'] }}</p>
+                                @break
+                            @default
+                                <p>New notification</p>
+                        @endswitch
                     @else
                         <p>New notification</p>
                     @endif

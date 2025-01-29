@@ -21,23 +21,26 @@ class Theme extends Model
     }
 
 
-    public function subscribers()
-    {
-        return $this->belongsToMany(User::class, 'theme_user')->withTimestamps();
-    }
-
-
+public function subscribers()
+{
+    return $this->belongsToMany(User::class, 'theme_user')
+                ->withTimestamps();
+}
 
     public function getArticlesCountAttribute()
 {
     return $this->articles()->count();
 }
 
-
+public function getSubscribersCountAttribute()
+{
+    return $this->subscribers_count ?? 0;
+}
 
 public function adminSubscribers()
-{
-    return $this->belongsToMany(Admin::class, 'admin_theme')->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Admin::class, 'admin_theme')
+                    ->withTimestamps();
+    }
     use HasFactory;
 }

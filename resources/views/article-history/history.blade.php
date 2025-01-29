@@ -22,17 +22,17 @@
                 <h3 class="history-item-title">{{ $history->article->title }}</h3>
                 <div class="history-itm-meta">
                     <span class="history-tag">{{ $history->article->theme->name }}</span>
-                    <span class="history-time">
-                        <i class='bx bx-time'></i>
+                    <span class="history-time" style="color: aliceblue">
+                        <i class='bx bx-time' style="color: aliceblue"></i>
                         {{ $history->created_at->diffForHumans() }}
                     </span>
-                    <span class="history-status">
+                    <span class="history-status" style="color: aliceblue">
                         Statut : {{ $history->status }}
                     </span>
                 </div>
             </div>
         @empty
-            <div class="no-results">No search history</div>
+            <div class="no-results" >No search history</div>
         @endforelse
     </div>
 </div>

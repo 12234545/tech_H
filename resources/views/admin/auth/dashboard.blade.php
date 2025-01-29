@@ -13,13 +13,13 @@
                 <li>
                     <a href="{{ route('admin.dashboard') }}">
                         <span class="icon"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></span>
-                        <span class="title">Tous les Thèmes</span>
+                        <span class="title">ALL Themes</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.dashboard', ['nouveautes' => true]) }}">
                         <span class="icon"><ion-icon name="analytics-outline"></ion-icon></span>
-                        <span class="title">Nouveautés</span>
+                        <span class="title">News</span>
                     </a>
                 </li>
                 @foreach($themes as $theme)
@@ -49,19 +49,19 @@
         <div id="articleModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal" onclick="closeModal()">&times;</span>
-                <h2 style="color: blanchedalmond;font-size: 30px">Ajouter un nouvel article</h2>
+                <h2 style="color: blanchedalmond;font-size: 30px">Add a new article</h2>
                 <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="title">Titre</label>
+                        <label for="title">Title</label>
                         <input type="text" id="title" name="title" required style="color: rgb(253, 249, 249)">
                     </div>
                     <div class="form-group">
-                        <label for="content">Contenu</label>
+                        <label for="content">Content</label>
                         <textarea id="content" name="content" rows="6" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="theme_id">Thème</label>
+                        <label for="theme_id">Theme</label>
                         <select id="theme_id" name="theme_id" required>
                             @foreach($themes as $theme)
                                 <option value="{{ $theme->id }}">{{ $theme->name }}</option>
@@ -69,10 +69,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="image">Image</label>
+                        <label for="image">Picture</label>
                         <input type="file" id="image" name="image" required accept="image/*">
                     </div>
-                    <button type="submit" class="submit-btn">Publier</button>
+                    <button type="submit" class="submit-btn">Publish</button>
                 </form>
             </div>
         </div>
@@ -108,7 +108,7 @@
                                    <i class="fas fa-star" data-value="5"></i>
                               </span>
                               <br>
-                              <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Commentaires<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
+                              <button type="button" onclick="togglepagecomment()" id="comment_page_chacher">Comments<i class='bx bxs-chevron-down' style="scale: 1.8 ;margin-left: 5px"></i></button>
                         <div class="comment_page " id="comment_page" >
                            <div>
                             @forelse($article->comments as $comment)
@@ -190,11 +190,7 @@
                                   <button class="partage-button" onclick="sharePost({{ $article->id }})">
                                         <ion-icon name="paper-plane-outline"></ion-icon>
                                   </button>
-                                  {{--
-                                  <button class="save-button" onclick="savePost({{ $article->id }})">
-                                       <i class="fas fa-bookmark"></i>
-                                  </button>
-                                  --}}
+
                                   <form action="{{ route('articles.save') }}" method="POST" style="display:inline;">
                                     @csrf
                                     <input type="hidden" name="article_id" value="{{ $article->id }}">
@@ -257,6 +253,7 @@
             </div>
             <div class="form-group">
                 <label for="theme_icon">Nom de l'icône</label>
+                <P style="color: rgb(244, 237, 227)">You can find the name of the icon in  <a href="https://ionicons.com/" target="_blank">ionicons.com</a></P>
                 <input type="text" id="theme_icon" name="icon" required style="color: rgb(240, 232, 232)">
             </div>
             <button type="submit" class="submit-btn">Ajouter</button>

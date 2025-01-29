@@ -8,32 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Notifications\NewRatingPosted;
 use App\Models\ArticleHistory;
+use App\Models\Admin;
+
+use App\Notifications\ThemeArticleNotification;
 
 class ArticleController extends Controller
 {
 
-    /*
 
-    public function index(Request $request)
-{
-    $query = Article::with(['creator', 'theme'])->latest();
-
-    // If a theme is selected, filter articles by theme
-    if ($request->has('theme_id')) {
-        $query->where('theme_id', $request->theme_id);
-    }
-
-    // If Nouveautés is selected, show articles from the last 7 days
-    if ($request->has('nouveautes')) {
-        $query->where('created_at', '>=', now()->subDays(7));
-    }
-
-    $articles = $query->paginate(10);
-    $themes = Theme::all();
-
-    return view('home/dashboard', compact('articles', 'themes'));
-}
-    */
     public function index(Request $request)
 {
     $user = auth()->user();
@@ -87,6 +69,14 @@ class ArticleController extends Controller
             'status' => 'publié' // Statut de l'article
         ]);
 
+        $theme = Theme::find($validated['theme_id']);
+        $admin = Admin::where('firstname', explode(' ', $theme->responsible)[0])
+                     ->where('lastname', explode(' ', $theme->responsible)[1])
+                     ->first();
+
+        if ($admin) {
+                        $admin->notify(new ThemeArticleNotification(auth()->user(), $theme, $article));
+                    }
 
         return redirect()->route('dashboard')->with('success', 'Article publié avec succès!');
     }
@@ -170,32 +160,6 @@ public function show($id)
 
     return view('dashboard', compact('article'));
 }
-public function destroy($id)
-{
-    $article = Article::findOrFail($id);
-    $article->delete();
 
-    return response()->json(['message' => 'Article supprimé avec succès.']);
+
 }
-
-// Modifier un article
-public function update(Request $request, $id)
-{
-    $article = Article::findOrFail($id);
-
-    // Valider les données du formulaire
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-    ]);
-
-    // Mettre à jour l'article
-    $article->update([
-        'title' => $request->title,
-        'content' => $request->content,
-    ]);
-
-    return response()->json(['message' => 'Article mis à jour avec succès.', 'article' => $article]);
-}
-}
-

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\Admin\Auth\AdminCommentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\ArticleController;
+
 
 Route::prefix('admin')->middleware('guest:admin')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('admin.register');
@@ -30,6 +33,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
      Route::get('/about', [HomeController::class, 'about'])->name('admin.about');
      Route::post('/themes/{theme}/admin-subscribe', [ThemeController::class, 'adminSubscribe'])
     ->name('admin.themes.subscribe');
+
+    Route::delete('/themes/{theme}/unsubscribe/{subscriberType}/{subscriberId}', [ThemeController::class, 'removeSubscriber'])
+    ->name('admin.themes.unsubscribe');
 });
 
 

@@ -3,13 +3,13 @@
 @section('title', 'Mes Thèmes')
 
 @section('content')
-<div class="container5">
-    <div class="main-container">
+<div class="container30">
+    <div class="main-container2">
         <div class="themes-list">
-            <h2>Mes Thèmes</h2>
+            <h2 style="color: rgb(219, 217, 215); text-align: center; font-size: 35px;">My Themes</h2>
 
             @if($themes->isEmpty())
-                <p>Vous n'avez pas encore créé de thèmes.</p>
+                <p>You have not created any themes yet.</p>
             @else
                 <div class="themes-grid">
                     @foreach($themes as $theme)
@@ -22,28 +22,11 @@
         <div class="theme-info">
             <h3>{{ $theme->name }}</h3>
             <p>Articles: {{ $theme->articles_count ?? 0 }}</p>
-            <p>Abonnés: {{ $theme->subscribers_count ?? 0 }}</p>
+            <p>Subscribers: {{ $theme->subscribers_count ?? 0 }}</p>
         </div>
     </a>
 </div>
 
-<style>
-
-.theme-link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-}
-
-.theme-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-</style>
                     @endforeach
                 </div>
             @endif
@@ -57,23 +40,30 @@
 <div id="themeModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeThemeModal()">&times;</span>
-        <h2 style="color: blanchedalmond;font-size: 30px">Ajouter un nouveau thème</h2>
+        <h2 style="color: blanchedalmond;font-size: 30px">Add new theme</h2>
         <form action="{{ route('themes.store') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="theme_name">Nom du thème</label>
+                <label for="theme_name"> Theme name</label>
                 <input type="text" id="theme_name" name="name" required style="color: black">
             </div>
             <div class="form-group">
-                <label for="theme_icon">Nom de l'icône</label>
+                <label for="theme_icon">Icon name</label>
                 <input type="text" id="theme_icon" name="icon" required style="color: black">
             </div>
-            <button type="submit" class="submit-btn">Ajouter</button>
+            <button type="submit" class="submit-btn">Add</button>
         </form>
     </div>
 </div>
 
 <style>
+.container30{
+    height: 100vh;
+    background: black;
+}
+.main-container2{
+    background: black;
+}
 .themes-list {
     padding: 20px;
     flex-direction: row-gap: 20px;
@@ -115,6 +105,25 @@
     color: #718096;
 }
 </style>
+
+<style>
+
+    .theme-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .theme-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+</style>
+
 
 <script>
     function openThemeModal() {

@@ -1,5 +1,6 @@
 @extends('welcome')
 @section('title','Profile')
+
 @push('styles')
 <style>
     :root {
@@ -12,16 +13,16 @@
  --text-muted: #94a3b8;
  --success-color: #22c55e;
  --danger-color: #ef4444;
- --card-background: rgba(30, 41, 59, 0.8);
+ --card2-background: rgba(30, 41, 59, 0.8);
  --transition-speed: 0.3s;
 }
 .hidden {
  display: none;
 }
 
-body {
+.container40{
  margin: 0;
- padding-top: 100px;
+ width: 100%;
  background: linear-gradient(135deg, var(--background-dark), #1a237e);
  font-family: 'Inter', sans-serif;
  color: var(--text-light);
@@ -30,9 +31,9 @@ body {
 
 }
 
-main {
+main {}
 /* Container principal */
-.profile-container {
+.profile-container2 {
  max-width: 95%; /* Augmenté à 95% de la largeur de la fenêtre */
  width: 95%;
  margin: 0 auto;
@@ -43,14 +44,14 @@ main {
  background: var(--background-dark);
  min-height: calc(100vh - 80px);
 }
-.profile-container, nav {
+.profile-container2, nav2 {
  max-width: 1200px; /* ou une valeur plus petite comme 1000px */
  margin: 0 auto;
  padding: 2rem;
 }
 
 /* Colonne gauche */
-.left-column {
+.left-column{2
  position: sticky;
  top: 100px;
  height: fit-content;
@@ -59,7 +60,7 @@ main {
  padding: 2rem;
  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
-.right-column {
+.right-column2 {
  max-width: 800px;
 }
 
@@ -189,7 +190,7 @@ main {
  margin-bottom: 2rem;
 }
 
-.theme-card {
+.theme-card2 {
  position: relative;
  height: 200px;
  border-radius: 15px;
@@ -198,7 +199,7 @@ main {
  transition: var(--transition-speed);
 }
 
-.theme-card::before {
+.theme-card2::before {
  content: '';
  position: absolute;
  top: 0;
@@ -221,7 +222,7 @@ main {
  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.theme-card:hover .theme-image {
+.theme-card2:hover .theme-image {
  transform: scale(1.1);
 }
 
@@ -237,32 +238,32 @@ main {
  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.theme-card:hover .theme-content {
+.theme-card2:hover .theme-content {
  transform: translateY(0);
 }
 
 /* Articles */
-.articles-list {
+.articles-list2 {
  display: grid;
  gap: 1.5rem;
 }
 
-.article-card {
+.article-card2 {
  max-width: 800px;
  margin: 0 auto;
- background: var(--card-background);
+ background: var(--card2-background);
  border-radius: 15px;
  padding: 1.5rem;
  position: relative;
  transition: var(--transition-speed);
  border-left: 4px solid var(--primary-color);
 }
-.article-card:not(.expanded) .article-excerpt {
+.article-card2:not(.expanded) .article-excerpt {
  max-height: 4.8em; /* Hauteur pour environ 3 lignes */
  overflow: hidden;
 }
 
-.article-card:hover {
+.article-card2:hover {
  transform: translateY(-5px);
  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
@@ -315,14 +316,14 @@ main {
 
 /* Ajoutez ces styles dans votre section CSS */
 
-.article-card:not(.expanded) .article-excerpt::after {
+.article-card2:not(.expanded) .article-excerpt::after {
  content: '';
  position: absolute;
  bottom: 0;
  left: 0;
  width: 100%;
  height: 2.4em;
- background: linear-gradient(transparent, var(--card-background));
+ background: linear-gradient(transparent, var(--card2-background));
 }
 
 
@@ -349,12 +350,12 @@ main {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
- .profile-container {
+ .profile-container2 {
      padding: 1rem;
      grid-template-columns: 1fr;
  }
 
- .left-column {
+ .left-column2 {
      position: relative;
      top: 0;
      max-width: 100%;
@@ -385,7 +386,7 @@ main {
      grid-template-columns: 1fr;
  }
 
- .nav-section {
+ .nav2-section {
      display: none;
  }
 }
@@ -402,12 +403,12 @@ main {
  padding: 1rem 0;
 }
 
-.theme-card {
+.theme-card2 {
  min-width: 280px; /* Fixe la largeur minimale */
  flex-shrink: 0; /* Empêche le rétrécissement */
 }
 
-.nav-button {
+.nav2-button {
  position: absolute;
  top: 50%;
  transform: translateY(-50%);
@@ -425,15 +426,15 @@ main {
  transition: var(--transition-speed);
 }
 
-.nav-button:hover {
+.nav2-button:hover {
  background: var(--primary-dark);
 }
 
-.nav-button.prev {
+.nav2-button.prev {
  left: 0;
 }
 
-.nav-button.next {
+.nav2-button.next {
  right: 0;
 }
 
@@ -475,7 +476,7 @@ main {
  transition: max-height 0.3s ease-out;
 }
 
-.article-card.expanded .article-excerpt {
+.article-card2.expanded .article-excerpt {
  max-height: none;
 }
 
@@ -514,7 +515,7 @@ main {
  z-index: 1000;
 }
 
-.modal-content {
+.modal-content2 {
  position: relative;
  background-color: #fff;
  margin: 5% auto;
@@ -525,7 +526,7 @@ main {
  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.close-modal {
+.close-modal2 {
  position: absolute;
  right: 1.5rem;
  top: 1rem;
@@ -534,7 +535,7 @@ main {
  color: #666;
 }
 
-.close-modal:hover {
+.close-modal2:hover {
  color: #333;
 }
 
@@ -673,14 +674,16 @@ main {
  </style>
  @endpush
 
+
  @section('content')
  <main>
-    <div class="container">
-        <div class="profile-container">
+    <div class="container40">
+        <div class="profile-container2">
             <!-- Colonne gauche -->
-            <div class="left-column">
-                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Photo de profil" class="profile-image">
-
+            <div class="left-column2">
+                <div class="modern-notification-avatar">
+                  <i style="scale: 1.5">  {{ substr($user->name, 0, 1) }}</i>
+                </div>
                 <div class="personal-info">
                     <h3 class="info-title">Informations Personnelles</h3>
 
@@ -709,7 +712,7 @@ main {
             </div>
 
             <!-- Colonne droite -->
-            <div class="right-column">
+            <div class="right-column2">
                 <div class="profile-stats">
                     <div class="stat-box">
                         <div class="stat-number">{{ $followers }}</div>
@@ -728,12 +731,12 @@ main {
                 <div class="activity-section">
                     <h3 class="info-title">Thèmes suivis</h3>
                     <div class="themes-wrapper">
-                    <button class="nav-button prev">←</button>
-                    <button class="nav-button next">→</button>
+                    <button class="nav2-button prev">←</button>
+                    <button class="nav2-button next">→</button>
                     <div class="themes-container">
                         @foreach($themes as $theme)
-                        <div class="theme-card">
-                            <img src="{{ asset('images/' . $theme->image) }}" alt="{{ $theme->name }}" class="theme-image">
+                        <div class="theme-card2">
+
                             <div class="theme-content">
                                 <div class="theme-title">{{ $theme->name }}</div>
                                 <div class="theme-description">{{ $theme->description }}</div>
@@ -751,9 +754,9 @@ main {
                     </div>
                 </div>
                 <h3 class="info-title">Mes Articles</h3>
-                <div class="articles-list">
+                <div class="articles-list2">
                     @foreach($articles as $article)
-                        <div class="article-card">
+                        <div class="article-card2">
                             <h4 class="article-title">{{ $article->title }}</h4>
                             <span class="article-date">{{ $article->created_at->format('d/m/Y') }}</span>
                             <p class="article-excerpt">{{ Str::limit($article->content, 100) }}</p>
@@ -776,8 +779,8 @@ main {
 <!-- Pied de page -->
 
 <div id="editArticleModal" class="modal">
-<div class="modal-content">
-    <span class="close-modal">&times;</span>
+<div class="modal-content2">
+    <span class="close-modal2">&times;</span>
     <h2>Modifier l'article</h2>
     <form id="editArticleForm">
         <input type="hidden" id="editArticleId" name="id">
@@ -810,8 +813,8 @@ main {
                     console.log("Bouton cliqué !"); // Vérifiez que l'événement est déclenché
 
                     // Trouvez le contenu complet associé à ce bouton
-                    const articleCard = button.closest('.article-card');
-                    const fullContent = articleCard.querySelector('.article-full-content');
+                    const articleCard2 = button.closest('.article-card2');
+                    const fullContent = articleCard2.querySelector('.article-full-content');
 
                     if (!fullContent) {
                         console.error("Contenu complet non trouvé !"); // Vérifiez que le contenu complet existe
@@ -832,8 +835,8 @@ main {
             });
         });
         const themesContainer = document.querySelector('.themes-container');
-                const prevButton = document.querySelector('.nav-button.prev');
-                const nextButton = document.querySelector('.nav-button.next');
+                const prevButton = document.querySelector('.nav2-button.prev');
+                const nextButton = document.querySelector('.nav2-button.next');
                 const scrollAmount = 300; // Ajustez selon vos besoins
 
                 nextButton.addEventListener('click', () => {
@@ -867,7 +870,7 @@ main {
                         if (data.message) {
                             alert(data.message);
                             // Supprimer l'article de l'interface
-                            button.closest('.article-card').remove();
+                            button.closest('.article-card2').remove();
                         }
                     })
                     .catch(error => console.error('Erreur:', error));
@@ -877,16 +880,16 @@ main {
     });
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('editArticleModal');
-        const closeModalButton = modal.querySelector('.close-modal');
+        const closeModalButton = modal.querySelector('.close-modal2');
         const editArticleForm = document.getElementById('editArticleForm');
 
         // Ouvrir le modal lors du clic sur "Modifier"
         document.querySelectorAll('.edit-article').forEach(button => {
             button.addEventListener('click', function() {
                 const articleId = button.getAttribute('data-article-id');
-                const articleCard = button.closest('.article-card');
-                const articleTitle = articleCard.querySelector('.article-title').textContent;
-                const articleContent = articleCard.querySelector('.article-full-content').textContent;
+                const articleCard2 = button.closest('.article-card2');
+                const articleTitle = articleCard2.querySelector('.article-title').textContent;
+                const articleContent = articleCard2.querySelector('.article-full-content').textContent;
 
                 // Remplir le formulaire avec les données de l'article
                 document.getElementById('editArticleId').value = articleId;
