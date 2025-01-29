@@ -59,7 +59,7 @@
           <div class="step" data-step="4">
                 <div class="profile-upload">
                     <div class="profile-preview empty" id="preview"></div>
-                    <input type="file" id="profile_photo" name="profile_photo" accept="image/*" style="display: none">
+                    <input type="file" id="profile_photo" name="profile_photo" accept="image/*" >
                     <label for="profile-photo" class="upload-btn">choose a photo</label>
                 </div>
                 <div class="buttons">

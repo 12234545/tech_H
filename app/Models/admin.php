@@ -46,4 +46,12 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+
+    public function subscribedThemes()
+    {
+        return $this->belongsToMany(Theme::class, 'admin_theme')
+                    ->withTimestamps();
+    }
+
 }

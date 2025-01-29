@@ -9,7 +9,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use App\Notifications\NewRatingPosted;
 use App\Models\ArticleHistory;
 
-class articlecontroller extends Controller
+class ArticleController extends Controller
 {
 
     /*
@@ -170,6 +170,32 @@ public function show($id)
 
     return view('dashboard', compact('article'));
 }
+public function destroy($id)
+{
+    $article = Article::findOrFail($id);
+    $article->delete();
 
-
+    return response()->json(['message' => 'Article supprimé avec succès.']);
 }
+
+// Modifier un article
+public function update(Request $request, $id)
+{
+    $article = Article::findOrFail($id);
+
+    // Valider les données du formulaire
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+    ]);
+
+    // Mettre à jour l'article
+    $article->update([
+        'title' => $request->title,
+        'content' => $request->content,
+    ]);
+
+    return response()->json(['message' => 'Article mis à jour avec succès.', 'article' => $article]);
+}
+}
+
