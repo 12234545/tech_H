@@ -8,9 +8,9 @@
       <h1>Welcome</h1>
       <div class="choixList">
         <h2>What do you want to become ?</h2>
-          <a href="{{ route('register')}}" class="">Un utilisateur</a>
+          <a href="{{ route('register')}}" class="">A User</a>
           <br>
-          <a href="{{ route('admin.register') }}" class="">Un administrateur</a>
+          <a href="{{ route('admin.register') }}" class="">A administrator</a>
       </div>
 
 

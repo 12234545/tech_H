@@ -7,7 +7,7 @@
 <div class="login">
     <form action="{{ route('admin.login') }}" method="POST" class="form">
         @csrf
-      <h1>responsable Login</h1>
+      <h1>Responsible  Login</h1>
       <div class="input-box">
         <input type="text" placeholder="Username" required  name="email" id="email" value="{{ old('email') }}" autocomplete="email" autofocus>
         <i class='bx bxs-user'></i>

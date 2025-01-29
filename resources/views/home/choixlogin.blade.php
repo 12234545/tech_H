@@ -8,9 +8,9 @@
       <h1>Welcome</h1>
       <div class="choixList">
         <h2>How are you ?</h2>
-          <a href="{{ route('login')}}" class="">Un utilisateur</a>
+          <a href="{{ route('login')}}" class="">I am a user</a>
           <br>
-          <a href="{{ route('admin.login') }}" class="">Un administrateur</a>
+          <a href="{{ route('admin.login') }}" class="">I am an administrator</a>
       </div>
 
 

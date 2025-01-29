@@ -114,3 +114,6 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
 
     Route::post('/themes', [ThemeController::class, 'store'])->name('themes.store');
     require __DIR__.'/adminauth.php';
+
+
+

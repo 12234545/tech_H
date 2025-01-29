@@ -26,6 +26,7 @@
      position:relative ;
      margin: 0;
      z-index: 1;
+
  }
  nav{
    position: sticky;
@@ -48,7 +49,8 @@
    width: 500px;
    display: flex;
    justify-content: center;
-   font-family: sans-serif;;
+   font-family: sans-serif;
+
  }
  .navbar ul{
    padding: 0;

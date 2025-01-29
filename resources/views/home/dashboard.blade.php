@@ -29,7 +29,7 @@
                     </a>
                     <form method="POST" action="{{ route('themes.subscribe', $theme->id) }}" style="display: inline;">
                         @csrf
-                        <button type="submit" class="subscribe-btn {{ Auth::user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}" onclick="return showNotification('Subscription successfully')">
+                        <button type="submit"  class="subscribe-btn {{ Auth::user()->subscribedThemes->contains($theme->id) ? 'subscribed' : '' }}" onclick="return showNotification('Subscription successfully')">
                             {{ Auth::user()->subscribedThemes->contains($theme->id) ? '✓' : '+' }}
                         </button>
                     </form>
