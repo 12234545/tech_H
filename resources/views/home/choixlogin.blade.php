@@ -10,7 +10,7 @@
         <h2>How are you ?</h2>
           <a href="{{ route('login')}}" class="">Un utilisateur</a>
           <br>
-          <a href="{{ route('login') }}" class="">Un administrateur</a>
+          <a href="{{ route('admin.login') }}" class="">Un administrateur</a>
       </div>
 
 

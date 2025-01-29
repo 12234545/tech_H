@@ -25,5 +25,17 @@ class Theme extends Model
     {
         return $this->belongsToMany(User::class, 'theme_user')->withTimestamps();
     }
+
+
+
+    public function getArticlesCountAttribute()
+{
+    return $this->articles()->count();
+}
+
+public function getSubscribersCountAttribute()
+{
+    return $this->subscribers_count ?? 0;
+}
     use HasFactory;
 }

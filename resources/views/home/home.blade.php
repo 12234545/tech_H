@@ -15,7 +15,7 @@
           <source src="{{asset('storage/images/a4.mov')}}" type="video/mp4">
     </video>
   </div>
-  <a  class="btn anim" style="padding: 20px 80px 20px 80px ; font-size: 20px;" href="{{ route('register')}}">Join Now</a>
+  <a  class="btn anim" style="padding: 20px 80px 20px 80px ; font-size: 20px;" href="{{ route('app_choixSingUp')}}">Join Now</a>
 </div>
 
 <div class="container1" >

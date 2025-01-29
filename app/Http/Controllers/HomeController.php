@@ -38,6 +38,10 @@ class HomeController extends Controller
         return view('home/choixlogin');
     }
 
+    public function choixsingUp(){
+        return view('home/choisSingUp');
+    }
+
 
 
 }

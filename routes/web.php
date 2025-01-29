@@ -36,6 +36,8 @@ Route::get('/ourService', [HomeController::class,'ourService'])
 Route::get('/choix', [HomeController::class,'choix'])
        ->name('app_choix');
 
+Route::get('/choixSingUp', [HomeController::class,'choixSingUp'])
+       ->name('app_choixSingUp');
 
 Route::match(['get','post'],'/dashboard',[HomeController::class,'dashboard'])
       ->middleware('auth')
@@ -109,3 +111,6 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
 
 
     Route::post('/themes/{theme}/subscribe', [ThemeController::class, 'subscribe'])->name('themes.subscribe');
+
+    Route::post('/themes', [ThemeController::class, 'store'])->name('themes.store');
+    require __DIR__.'/adminauth.php';
