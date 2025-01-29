@@ -253,6 +253,7 @@
             </div>
             <div class="form-group">
                 <label for="theme_icon">Nom de l'icône</label>
+                <P style="color: rgb(244, 237, 227)">You can find the name of the icon in  <a href="https://ionicons.com/" target="_blank">ionicons.com</a></P>
                 <input type="text" id="theme_icon" name="icon" required style="color: rgb(240, 232, 232)">
             </div>
             <button type="submit" class="submit-btn">Ajouter</button>
