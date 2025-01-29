@@ -20,12 +20,7 @@ class Theme extends Model
         return $this->hasMany(Article::class);
     }
 
-/*
-    public function subscribers()
-    {
-        return $this->belongsToMany(User::class, 'theme_user')->withTimestamps();
-    }
-*/
+
 public function subscribers()
 {
     return $this->belongsToMany(User::class, 'theme_user')
@@ -37,16 +32,12 @@ public function subscribers()
     return $this->articles()->count();
 }
 
-
-/*
-public function adminSubscribers()
+public function getSubscribersCountAttribute()
 {
-    return $this->belongsToMany(Admin::class, 'admin_theme')->withTimestamps();
+    return $this->subscribers_count ?? 0;
 }
-    */
 
-
-    public function adminSubscribers()
+public function adminSubscribers()
     {
         return $this->belongsToMany(Admin::class, 'admin_theme')
                     ->withTimestamps();

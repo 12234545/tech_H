@@ -36,7 +36,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     Route::delete('/themes/{theme}/unsubscribe/{subscriberType}/{subscriberId}', [ThemeController::class, 'removeSubscriber'])
     ->name('admin.themes.unsubscribe');
-
 });
 
 

@@ -12,7 +12,7 @@ use App\Models\Admin;
 
 use App\Notifications\ThemeArticleNotification;
 
-class articlecontroller extends Controller
+class ArticleController extends Controller
 {
 
 
@@ -160,9 +160,6 @@ public function show($id)
 
     return view('dashboard', compact('article'));
 }
-
-
-
 
 
 }

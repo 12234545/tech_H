@@ -46,8 +46,6 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-
     public function subscribedThemes()
     {
         return $this->belongsToMany(Theme::class, 'admin_theme')
@@ -60,4 +58,5 @@ class Admin extends Authenticatable
     return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')
         ->orderBy('created_at', 'desc');
 }
+
 }

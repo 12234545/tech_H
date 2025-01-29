@@ -37,23 +37,22 @@ class ThemeController extends Controller
         }
     }
 
-
     public function adminSubscribe(Theme $theme)
-{
-    $admin = Auth::guard('admin')->user();
+    {
+        $admin = Auth::guard('admin')->user();
 
-    if ($admin->subscribedThemes()->where('theme_id', $theme->id)->exists()) {
-        // Désabonner l'administrateur
-        $admin->subscribedThemes()->detach($theme->id);
-        $theme->decrement('subscribers_count');
-        return redirect()->back()->with('success', 'Désabonnement réussi !');
-    } else {
-        // Abonner l'administrateur
-        $admin->subscribedThemes()->attach($theme->id);
-        $theme->increment('subscribers_count');
-        return redirect()->back()->with('success', 'Abonnement réussi !');
+        if ($admin->subscribedThemes()->where('theme_id', $theme->id)->exists()) {
+            // Désabonner l'administrateur
+            $admin->subscribedThemes()->detach($theme->id);
+            $theme->decrement('subscribers_count');
+            return redirect()->back()->with('success', 'Désabonnement réussi !');
+        } else {
+            // Abonner l'administrateur
+            $admin->subscribedThemes()->attach($theme->id);
+            $theme->increment('subscribers_count');
+            return redirect()->back()->with('success', 'Abonnement réussi !');
+        }
     }
-}
 
     public function store(Request $request)
     {
@@ -71,16 +70,7 @@ class ThemeController extends Controller
 
         return redirect()->back()->with('success', 'Thème ajouté avec succès');
     }
-    /*
-    public function myThemes()
-{
-    $admin = Auth::guard('admin')->user();
-    $themes = Theme::where('responsible', $admin->firstname . ' ' . $admin->lastname)
-        ->get();
 
-    return view('admin.auth.mesthemes', compact('themes'));
-}
-    */
 
     public function myThemes()
 {
@@ -151,60 +141,7 @@ public function showThemeArticles($id)
         return view('admin.auth.theme-articles', compact('articles', 'themes', 'theme', 'allSubscribers'));
     }
 
-/*
-    public function removeSubscriber(Theme $theme, $subscriberType, $subscriberId)
-    {
-        // Vérifier si l'admin actuel est le responsable du thème
-        $admin = auth()->guard('admin')->user();
-        if ($theme->responsible !== $admin->firstname . ' ' . $admin->lastname) {
-            return redirect()->back()->with('error', 'Vous n\'avez pas la permission de gérer les abonnés de ce thème.');
-        }
 
-        try {
-            if ($subscriberType === 'admin') {
-                $theme->adminSubscribers()->detach($subscriberId);
-            } else {
-                $theme->subscribers()->detach($subscriberId);
-            }
-            return redirect()->back()->with('success', 'Abonné retiré avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Une erreur est survenue lors de la suppression de l\'abonné.');
-        }
-    }
-        */
-       /*
-        public function removeSubscriber(Theme $theme, $subscriberType, $subscriberId)
-        {
-            // Vérifiez si l'admin actuel est le responsable du thème
-            $admin = auth()->guard('admin')->user();
-            $adminFullName = $admin->firstname . ' ' . $admin->lastname;
-
-            if ($theme->responsible !== $adminFullName) {
-                return redirect()->back()->with('error', 'Vous n\'avez pas la permission de gérer les abonnés de ce thème.');
-            }
-
-            try {
-                if ($subscriberType === 'admin') {
-                    // Suppression de la relation dans la table pivot admin_theme
-                    DB::table('admin_theme')
-                        ->where('theme_id', $theme->id)
-                        ->where('admin_id', $subscriberId)
-                        ->delete();
-                } else {
-                    // Suppression de la relation dans la table pivot theme_user
-                    DB::table('theme_user')
-                        ->where('theme_id', $theme->id)
-                        ->where('user_id', $subscriberId)
-                        ->delete();
-                }
-
-                return redirect()->back()->with('success', 'Abonné supprimé avec succès.');
-            } catch (\Exception $e) {
-
-                return redirect()->back()->with('error', 'Une erreur est survenue lors de la suppression de l\'abonné.');
-            }
-        }
-            */
 
             public function removeSubscriber(Theme $theme, $subscriberType, $subscriberId)
             {

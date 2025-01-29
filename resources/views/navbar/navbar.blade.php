@@ -161,7 +161,7 @@
                         <i class='bx bxs-user-circle' style="color: rgb(242, 237, 237) ; font-size: 60px"></i>
                      </div>
                      <div class="dropdown-content">
-                         <a href="#"><i class='bx bxs-user' style="font-size: 20px"></i> My profil</a>
+                        <a href="{{ route('profile.show') }}"><i class='bx bxs-user' style="font-size: 20px"></i> My profil</a>
                          @if(Auth::guard('admin')->check())
                          <a href="{{ route('admin.logout')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
                          @else

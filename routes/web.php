@@ -10,7 +10,7 @@ use App\Http\Controllers\SavedArticleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ArticleHistoryController;
 use App\Http\Controllers\ThemeController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,4 +116,19 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
     require __DIR__.'/adminauth.php';
 
 
+
+
+
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/destroy', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+
+// Modifier un article
+Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
 
