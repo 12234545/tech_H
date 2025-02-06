@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ArticleHistoryController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FollowerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,3 +133,7 @@ Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'show
 // Modifier un article
 Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
 
+Route::post('/users/{userId}/follow', [FollowerController::class, 'toggle'])
+    ->name('users.follow')
+    ->middleware('auth');
+ Route::get('/user/{id}/profile', [ProfileController::class, 'show'])->name('user.profile');

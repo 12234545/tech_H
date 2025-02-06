@@ -23,14 +23,7 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
     Route::post('login', [LoginController::class, 'store']);
 });
 
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    Route::post('/save-article', [SavedArticleController::class, 'save'])
-        ->name('articles.save');
-    Route::get('/saved-articles', [SavedArticleController::class, 'index'])
-        ->name('saved.articles');
-    Route::delete('/unsave-article/{id}', [SavedArticleController::class, 'unsave'])
-        ->name('articles.unsave');
-});
+
 
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [AdminArticleController::class, 'index'])->name('admin.dashboard');
@@ -51,34 +44,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     ->name('admin.themes.unsubscribe');
 });
 
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    Route::get('/article-history', [ArticleHistoryController::class, 'index'])
-        ->name('article.history');
-
-    Route::patch('/article-history/{id}', [ArticleHistoryController::class, 'updateStatus'])
-        ->name('article.history.update');
-});
-
-Route::post('/article-history/search', [ArticleHistoryController::class, 'search'])
-    ->name('article.history.search')
-    ->middleware('auth:admin');
-
-Route::get('/article-history/show/{id}', [ArticleHistoryController::class, 'showSearchResult'])
-    ->name('article.history.show')
-    ->middleware('auth:admin');
-
-
-    Route::delete('/article-history/clear', [ArticleHistoryController::class, 'clearAll'])
-    ->name('article.history.clear')
-    ->middleware('auth:admin');
-
-
-
-
 
  Route::get('showFromNotification/{article}/{notification}', [ArticleController::class, 'showFromNotification'])
     ->name('Article.showFromNotification');
-
 
 
 Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');

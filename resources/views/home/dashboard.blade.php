@@ -76,6 +76,7 @@
             <div class="listhhhh">
              @foreach($articles as $article)
                      <div class="post"  data-article-id="{{ $article->id }}">
+                        {{--
                          <div class="post-header">
                              <div class="post-avatar" data-initial="{{ substr(Auth::user()->name, 0, 1) }}">
                                 <div class="modern-notification-avatar">
@@ -87,7 +88,20 @@
                                     <div>{{ $article->created_at->diffForHumans() }}</div>
                                </div>
                          </div>
-
+                          --}}
+                          <div class="post-header">
+                            <a href="{{ route('user.profile', ['id' => $article->creator->id]) }}" class="post-avatar">
+                                <div class="modern-notification-avatar">
+                                    {{ substr($article->creator->name, 0, 1) }}
+                                </div>
+                            </a>
+                            <div class="post-meta">
+                                <a href="{{ route('user.profile', ['id' => $article->creator->id]) }}">
+                                    <strong>{{ $article->creator->name }}</strong>
+                                </a>
+                                <div>{{ $article->created_at->diffForHumans() }}</div>
+                            </div>
+                        </div>
                           <img id="imageARTICLE" src="{{ $article->image }}" alt="{{ $article->title }}">
                           <h3>{{ $article->title }}</h3>
                           <p>{{ $article->content }}</p>

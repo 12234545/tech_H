@@ -20,10 +20,21 @@
  display: none;
 }
 
+.follow-btn{
+    margin: 10px;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #e5e8f0;
+    color: rgb(2, 2, 2);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .container40{
  margin: 0;
  width: 100%;
- background: linear-gradient(135deg, var(--background-dark), #1a237e);
+ background: var(--background-dark);
  font-family: 'Inter', sans-serif;
  color: var(--text-light);
  line-height: 1.6;
@@ -34,8 +45,8 @@
 main {}
 /* Container principal */
 .profile-container2 {
- max-width: 95%; /* Augmenté à 95% de la largeur de la fenêtre */
- width: 95%;
+ max-width: 100%; /* Augmenté à 95% de la largeur de la fenêtre */
+ width: 100%;
  margin: 0 auto;
  padding: 2rem;
  display: grid;
@@ -684,12 +695,25 @@ main {}
                 <div class="modern-notification-avatar">
                   <i style="scale: 1.5">  {{ substr($user->name, 0, 1) }}</i>
                 </div>
+                @if(!$isCurrentUser)
+    <button
+        class="follow-btn"
+        data-user-id="{{ $user->id }}"
+        data-is-followed="{{ $isFollowed ? 'true' : 'false' }}"
+    >
+        {{ $isFollowed ? 'Se désabonner' : 'S\'abonner' }}
+    </button>
+@endif
                 <div class="personal-info">
                     <h3 class="info-title">Informations Personnelles</h3>
 
                     <div class="info-item">
                         <div class="info-label">Nom</div>
                         <div class="info-value">{{ $user->name }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Description</div>
+                        <div class="info-value">{{ $user->description }}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Email</div>
@@ -700,15 +724,19 @@ main {}
                         <div class="info-value">{{ $user->created_at->format('d/m/Y') }}</div>
                     </div>
                 </div>
+{{--
 
-                <div class="profile-actions">
-                    <a href="{{ route('profile.edit') }}" class="btn btn-primary">Modifier le profil</a>
-                    <form action="{{ route('profile.destroy') }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Supprimer le compte</button>
-                    </form>
-                </div>
+--}}
+@if($isCurrentUser)
+<div class="profile-actions">
+    <a href="{{ route('profile.edit') }}" class="btn btn-primary">Modifier le profil</a>
+    <form action="{{ route('profile.destroy') }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Supprimer le compte</button>
+    </form>
+</div>
+@endif
             </div>
 
             <!-- Colonne droite -->
@@ -765,8 +793,12 @@ main {}
                             </div>
                             <button class="read-more">Lire la suite</button>
                             <!-- Boutons Supprimer et Modifier -->
-                            <button class="delete-article" data-article-id="{{ $article->id }}">Supprimer</button>
-                            <button class="edit-article" data-article-id="{{ $article->id }}">Modifier</button>
+                            @if($isCurrentUser)
+<div class="article-options">
+    <button class="delete-article" data-article-id="{{ $article->id }}">Supprimer</button>
+    <button class="edit-article" data-article-id="{{ $article->id }}">Modifier</button>
+</div>
+@endif
                         </div>
                     @endforeach
                 </div>
@@ -943,4 +975,35 @@ main {}
     });
 
             </script>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    const followButton = document.querySelector('.follow-btn');
+
+    if (followButton) {
+        followButton.addEventListener('click', function() {
+            const userId = this.getAttribute('data-user-id');
+
+            fetch(`/users/${userId}/follow`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'followed') {
+                    followButton.textContent = 'Se désabonner';
+                } else {
+                    followButton.textContent = 'S\'abonner';
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    }
+});
+</script>
+
+
 @endpush

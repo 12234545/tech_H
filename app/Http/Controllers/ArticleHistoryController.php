@@ -8,7 +8,7 @@ use App\Models\Article;
 
 class ArticleHistoryController extends Controller
 {
-
+    /*
     public function index(Request $request)
     {
         $query = ArticleHistory::with(['article', 'user'])
@@ -31,7 +31,7 @@ class ArticleHistoryController extends Controller
 
         return view('article-history/history', compact('histories'));
     }
-
+    */
 
     public function updateStatus(Request $request, $id)
     {
@@ -45,7 +45,7 @@ class ArticleHistoryController extends Controller
     }
 
     // Méthode pour ajouter automatiquement à l'historique
-
+   /*
     public static function addToHistory($articleId)
     {
         ArticleHistory::create([
@@ -54,12 +54,9 @@ class ArticleHistoryController extends Controller
             'status' => 'En cours'
         ]);
     }
+*/
 
 
-   //ajouter
-
-
-   //////////////////////////
 
    public function search(Request $request)
     {
@@ -108,4 +105,36 @@ class ArticleHistoryController extends Controller
         ], 500);
     }
 }
+
+
+
+protected function getUserId()
+    {
+        return auth('admin')->check() ? auth('admin')->id() : auth()->id();
+    }
+
+    protected function getUserType()
+    {
+        return auth('admin')->check() ? 'admin' : 'utilisateur';
+    }
+
+    public function index(Request $request)
+    {
+        $query = ArticleHistory::with(['article', 'user'])
+            ->where('user_id', $this->getUserId())
+            ->where('user_type', $this->getUserType());
+
+        $histories = $query->paginate(10);
+        return view('article-history/history', compact('histories'));
+    }
+
+    public static function addToHistory($articleId)
+    {
+        ArticleHistory::create([
+            'user_id' => auth('admin')->check() ? auth('admin')->id() : auth()->id(),
+            'user_type' => auth('admin')->check() ? 'admin' : 'utilisateur',
+            'article_id' => $articleId,
+            'status' => 'En cours'
+        ]);
+    }
 }

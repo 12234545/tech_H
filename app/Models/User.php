@@ -57,5 +57,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Theme::class, 'theme_user')->withTimestamps();
     }
 
+    public function followers()
+{
+    return $this->hasMany(Follower::class, 'creator_id');
+}
 
+public function isFollowedBy($userId)
+{
+    return $this->followers()->where('follower_id', $userId)->exists();
+}
 }
