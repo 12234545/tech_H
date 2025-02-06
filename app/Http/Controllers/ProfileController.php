@@ -57,4 +57,11 @@ public function destroy()
 
         return view('profile', compact('user', 'articles', 'followers', 'following', 'themes'));
     }
+
+
+
+
+
+
+
 }
