@@ -9,6 +9,10 @@ use App\Http\Controllers\Admin\Auth\AdminCommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\SavedArticleController;
+use App\Http\Controllers\ArticleHistoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
 
 
 Route::prefix('admin')->middleware('guest:admin')->group(function () {
@@ -18,6 +22,8 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
     Route::get('login', [LoginController::class, 'create'])->name('admin.login');
     Route::post('login', [LoginController::class, 'store']);
 });
+
+
 
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [AdminArticleController::class, 'index'])->name('admin.dashboard');
@@ -37,5 +43,20 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::delete('/themes/{theme}/unsubscribe/{subscriberType}/{subscriberId}', [ThemeController::class, 'removeSubscriber'])
     ->name('admin.themes.unsubscribe');
 });
+
+
+ Route::get('showFromNotification/{article}/{notification}', [ArticleController::class, 'showFromNotification'])
+    ->name('Article.showFromNotification');
+
+
+Route::post('/articles/{article}/rate', [ArticleController::class, 'rate'])->name('articles.rate');
+
+
+
+
+
+
+
+
 
 

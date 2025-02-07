@@ -71,7 +71,7 @@ class ThemeController extends Controller
         return redirect()->back()->with('success', 'Thème ajouté avec succès');
     }
 
-
+/*
     public function myThemes()
 {
     $admin = auth()->guard('admin')->user();
@@ -88,7 +88,22 @@ class ThemeController extends Controller
 
     return view('admin.auth.mesthemes', compact('themes'));
 }
+*/
+public function myThemes()
+{
+    $admin = auth()->guard('admin')->user();
+    $fullName = $admin->firstname . ' ' . $admin->lastname;
 
+    $themes = Theme::where('responsible', $fullName)
+        ->withCount(['articles'])
+        ->get()
+        ->map(function ($theme) {
+            $theme->subscribers_count = $theme->subscribers()->count() + $theme->adminSubscribers()->count();
+            return $theme;
+        });
+
+    return view('admin.auth.mesthemes', compact('themes'));
+}
 public function showThemeArticles($id)
     {
         $admin = Auth::guard('admin')->user();
@@ -137,6 +152,7 @@ public function showThemeArticles($id)
         }
 
         $themes = Theme::where('responsible', $adminFullName)->get();
+        $theme->subscribers_count = $theme->subscribers()->count() + $theme->adminSubscribers()->count();
 
         return view('admin.auth.theme-articles', compact('articles', 'themes', 'theme', 'allSubscribers'));
     }

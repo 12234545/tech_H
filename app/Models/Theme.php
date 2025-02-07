@@ -34,7 +34,7 @@ public function subscribers()
 
 public function getSubscribersCountAttribute()
 {
-    return $this->subscribers_count ?? 0;
+    return $this->subscribers()->count() + $this->adminSubscribers()->count();
 }
 
 public function adminSubscribers()

@@ -93,44 +93,44 @@
         </div>
         <div class="modern-notification-content">
             <div class="modern-notification-text">
+                @if(isset($notification->data['notification_type'])!='new_follower')
                 <a href="{{ route('Article.showFromNotification',['article'=>$notification->data['article_id'] , 'notification'=>$notification->id]) }}">
-                    {{--
-                    @if(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'comment')
-                        <p>{{ $notification->data['user_name'] }} posted a comment on your article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
-                    @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'reply')
-                        <p>{{ $notification->data['user_name'] }} replied to your comment on the  article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
-                    @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'rating')
-                        <p>{{ $notification->data['user_name'] }} rated your article <strong>{{ $notification->data['titreArticle'] }}</strong> {{ $notification->data['rating'] }} étoiles</p>
-                    @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] === 'recommendation')
-                        <p>Recommended article for you  : <strong>{{ $notification->data['titreArticle'] }}</strong></p>
-                    @else
-                        <p>New notification</p>
-                    @endif
-                   --}}
-                   @if(isset($notification->data['notification_type']))
-                        @switch($notification->data['notification_type'])
-                            @case('comment')
-                                <p>{{ $notification->data['user_name'] }} posted a comment on your article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
-                                @break
-                            @case('reply')
-                                <p>{{ $notification->data['user_name'] }} replied to your comment on the article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
-                                @break
-                            @case('rating')
-                                <p>{{ $notification->data['user_name'] }} rated your article <strong>{{ $notification->data['titreArticle'] }}</strong> {{ $notification->data['rating'] }} étoiles</p>
-                                @break
-                            @case('theme_subscription')
-                                <p>{{ $notification->data['user_name'] }} s'est abonné à votre thème <strong>{{ $notification->data['theme_name'] }}</strong></p>
-                                @break
-                            @case('new_theme_article')
-                                <p>{{ $notification->data['user_name'] }} a publié un article dans votre thème <strong>{{ $notification->data['theme_name'] }}</strong> : {{ $notification->data['article_title'] }}</p>
-                                @break
-                            @default
-                                <p>New notification</p>
-                        @endswitch
-                    @else
-                        <p>New notification</p>
-                    @endif
+                    @if(isset($notification->data['notification_type']))
+                    @switch($notification->data['notification_type'])
+                        @case('comment')
+                            <p>{{ $notification->data['user_name'] }} posted a comment on your article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
+                            @break
+                        @case('reply')
+                            <p>{{ $notification->data['user_name'] }} replied to your comment on the article <strong>{{ $notification->data['titreArticle'] }}</strong></p>
+                            @break
+                        @case('rating')
+                            <p>{{ $notification->data['user_name'] }} rated your article <strong>{{ $notification->data['titreArticle'] }}</strong> {{ $notification->data['rating'] }} étoiles</p>
+                            @break
+                        @case('theme_subscription')
+                            <p>{{ $notification->data['user_name'] }} s'est abonné à votre thème <strong>{{ $notification->data['theme_name'] }}</strong></p>
+                            @break
+                        @case('new_theme_article')
+                            <p>{{ $notification->data['user_name'] }} a publié un article dans votre thème <strong>{{ $notification->data['theme_name'] }}</strong> : {{ $notification->data['article_title'] }}</p>
+                            @break
+                        @default
+                            <p>New notification</p>
+                    @endswitch
+                @else
+                    <p>New notification</p>
+                @endif
                 </a>
+                {{--
+                @else
+                <a href="{{ route('user.profile', ['id' => $notification->data['user_id'], 'notification'=>$notification->id]) }}">
+                    <p>{{ $notification->data['user_name'] }} started following you</p>
+                </a>
+                @endif
+                --}}
+                @elseif(isset($notification->data['notification_type']) && $notification->data['notification_type'] == 'new_follower')
+    <a href="{{ route('user.profile', ['id' => $notification->data['user_id'], 'notification' => $notification->id]) }}">
+        <p>{{ $notification->data['user_name'] }} started following you</p>
+    </a>
+@endif
             </div>
             <div class="modern-notification-time">
                 {{ $notification->created_at->diffForHumans() }}
@@ -161,14 +161,14 @@
                         <i class='bx bxs-user-circle' style="color: rgb(242, 237, 237) ; font-size: 60px"></i>
                      </div>
                      <div class="dropdown-content">
-                        <a href="{{ route('profile.show') }}"><i class='bx bxs-user' style="font-size: 20px"></i> My profil</a>
+                        <a href="{{ route('user.profile', ['id' => Auth::id()]) }}"><i class='bx bxs-user' style="font-size: 20px"></i> My profil</a>
                          @if(Auth::guard('admin')->check())
                          <a href="{{ route('admin.logout')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
                          @else
                          <a href="{{ route('app_logOut')}}" class="logO"><i class='bx bx-log-out' style="font-size: 20px"></i>Log Out</a>
                          @endif
-                         <a href="{{ route('saved.articles')}}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
-                         <a href="{{ route('article.history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
+<a href="{{ route('saved.articles')}}" class="logO"><i class='bx bx-bookmark'style="font-size: 20px" ></i>Save</a>
+<a href="{{ route('article.history')}}"><i class='bx bx-history' style="  font-size: 20px"></i>History</a>
                      </div>
               </div>
            </div>
