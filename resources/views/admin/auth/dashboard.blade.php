@@ -82,11 +82,7 @@
                         <div class="post-header">
                             <div class="post-avatar">
                                 <div class="modern-notification-avatar">
-                                    @if(Auth::guard('admin')->check())
-                                        {{ substr(Auth::guard('admin')->user()->name ?? '', 0, 1) }}
-                                    @else
-                                        A
-                                    @endif
+                                    {{ substr($article->creator->name, 0, 1) }}
                                 </div>
                             </div>
                             <div class="post-meta">

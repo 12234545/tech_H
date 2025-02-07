@@ -699,6 +699,7 @@ main {}
     <button
         class="follow-btn"
         data-user-id="{{ $user->id }}"
+        onclick="return showNotification('Vous êtes abonné à ce profil.')"
         data-is-followed="{{ $isFollowed ? 'true' : 'false' }}"
     >
         {{ $isFollowed ? 'Se désabonner' : 'S\'abonner' }}
@@ -724,9 +725,7 @@ main {}
                         <div class="info-value">{{ $user->created_at->format('d/m/Y') }}</div>
                     </div>
                 </div>
-{{--
 
---}}
 @if($isCurrentUser)
 <div class="profile-actions">
     <a href="{{ route('profile.edit') }}" class="btn btn-primary">Modifier le profil</a>
@@ -757,7 +756,12 @@ main {}
                 </div>
 
                 <div class="activity-section">
-                    <h3 class="info-title">Thèmes suivis</h3>
+                    <h3 class="info-title">
+
+                        Thèmes suivis
+
+
+                    </h3>
                     <div class="themes-wrapper">
                     <button class="nav2-button prev">←</button>
                     <button class="nav2-button next">→</button>
@@ -781,7 +785,13 @@ main {}
                         @endforeach
                     </div>
                 </div>
-                <h3 class="info-title">Mes Articles</h3>
+                <h3 class="info-title">
+                    @if($isCurrentUser)
+                    Mes Articles
+                    @else
+                    Articles de {{ $user->name }}
+                    @endif
+                </h3>
                 <div class="articles-list2">
                     @foreach($articles as $article)
                         <div class="article-card2">

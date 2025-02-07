@@ -45,29 +45,23 @@ public function destroy()
     return redirect('/')->with('success', 'Votre compte a été supprimé.');
 }
 
-/*
-    public function show()
-    {
-        $id = auth()->id();
-        $user = User::findOrFail($id);
-        $articles = Article::where('creator_id', $id)->get();
-        $followers = Follower::where('creator_id', $id)->count();
-        $following = Follower::where('follower_id', $id)->count();
-        $themes = Theme::all();
-        $isCurrentUser = auth()->id() === $user->id;
 
-        return view('profile', compact('user', 'articles', 'followers', 'following', 'themes'));
-    }
-*/
-    public function show($id)
+    public function show($id , Request $request)
 {
-    $user = User::findOrFail($id);
+    $user = User::findOrFail($id );
     $articles = Article::where('creator_id', $id)->get();
     $followers = Follower::where('creator_id', $id)->count();
     $following = Follower::where('follower_id', $id)->count();
     $themes = Theme::all();
     $isCurrentUser = auth()->id() === $user->id;
     $isFollowed = auth()->user()->followers()->where('creator_id', $id)->exists();
+
+    if ($request->has('notification')) {
+        $notification = auth()->user()->notifications()->find($request->notification);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+    }
 
     return view('profile', compact('user', 'articles', 'followers', 'following', 'themes', 'isCurrentUser', 'isFollowed'));
 }

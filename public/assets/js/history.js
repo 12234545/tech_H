@@ -159,24 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Gestionnaire pour la page historique
-    /*
-    const historyContainer = document.querySelector('.history-list');
-    if (historyContainer) {
-        // Effacer l'historique
-        document.querySelector('.clear-history')?.addEventListener('click', function() {
-            if (confirm('Voulez-vous vraiment effacer tout l\'historique ?')) {
-                fetch('/history/clear', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                }).then(() => {
-                    historyContainer.innerHTML = '<p class="no-history">Aucun historique</p>';
-                });
-            }
-        });
-    }
-      */
+
 
         // Navigation depuis l'historique
 
